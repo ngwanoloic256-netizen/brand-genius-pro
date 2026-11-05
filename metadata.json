@@ -1,6 +1,0 @@
-{
-  "name": "AMS Axe Multi Services Sarl",
-  "description": "Votre passerelle vers les opportunités internationales. Accompagnement premium pour les études, carrières et visas.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

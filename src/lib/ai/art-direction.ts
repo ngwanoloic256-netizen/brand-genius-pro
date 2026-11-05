@@ -1,0 +1,762 @@
+import type { TypeClass } from "./fonts";
+
+/**
+ * Art direction profiles — the mechanism that stops every brand coming out
+ * looking the same.
+ *
+ * Each profile is a *complete* token set: geometry, type classes, colour logic,
+ * and the photographic treatment its mockups must follow. Nothing downstream
+ * invents a style of its own; the palette asks the profile which harmony to
+ * use, typography asks it which classes to pair, the logo prompt quotes its
+ * shape language, and mockup selection is filtered by its surface rules.
+ *
+ * Variety between brands therefore comes from choosing a *profile*, not from
+ * randomising details inside one house style.
+ */
+
+export type ColorHarmony =
+  | "monochrome"
+  | "analogous"
+  | "complementary"
+  | "split-complementary"
+  | "triadic";
+
+/** The four personality axes, each 0..1. */
+export interface Personality {
+  /** 0 = serious, 1 = playful */
+  seriousPlayful: number;
+  /** 0 = classic, 1 = modern */
+  classicModern: number;
+  /** 0 = mass-market, 1 = premium */
+  massPremium: number;
+  /** 0 = quiet, 1 = loud */
+  quietLoud: number;
+}
+
+export const NEUTRAL_PERSONALITY: Personality = {
+  seriousPlayful: 0.5,
+  classicModern: 0.5,
+  massPremium: 0.5,
+  quietLoud: 0.5,
+};
+
+export interface ArtDirection {
+  id: string;
+  name: string;
+  /** One sentence, shown to the user on the guide page. */
+  description: string;
+
+  /* Geometry */
+  radius: number;
+  stroke: number;
+  whitespaceRatio: number;
+  grid: { columns: number; gutter: number };
+
+  /* Type */
+  type: {
+    display: TypeClass;
+    heading: TypeClass;
+    body: TypeClass;
+    data: TypeClass;
+    /** Modular scale ratio. */
+    scale: number;
+    case: "sentence" | "upper";
+    /** Display tracking, in em. */
+    tracking: number;
+  };
+
+  /* Colour */
+  color: {
+    harmony: ColorHarmony;
+    saturation: "low" | "medium" | "high";
+    neutrals: "cool" | "warm" | "true";
+    /** Whether the brand's default surface is dark. */
+    darkSurface: boolean;
+  };
+
+  /* Language, quoted into the logo prompt and shown in the guide */
+  shapes: string;
+  iconography: string;
+  imagery: string;
+  texture: string;
+  shadow: string;
+  layoutSignature: string;
+
+  /* Mockup treatment — spec §7.2, driven by the profile rather than chance */
+  mockup: {
+    lighting: string;
+    background: string;
+    props: string;
+    /** Backplate ids this profile leans on. */
+    prefer: string[];
+    /** Backplate ids that contradict it. */
+    avoid: string[];
+  };
+
+  /** Sectors this profile naturally serves. */
+  sectors: string[];
+  /** Where the profile sits on the four axes. */
+  personality: Personality;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  The library                                                               */
+/* -------------------------------------------------------------------------- */
+
+export const ART_DIRECTIONS: ArtDirection[] = [
+  {
+    id: "minimal-suisse",
+    name: "Swiss minimal",
+    description:
+      "Strict left alignment, a visible grid, and one accent doing all the work. Reads as precise and unarguable.",
+    radius: 0,
+    stroke: 1,
+    whitespaceRatio: 0.45,
+    grid: { columns: 12, gutter: 24 },
+    type: {
+      display: "grotesque-neutral",
+      heading: "grotesque-neutral",
+      body: "grotesque-neutral",
+      data: "mono",
+      scale: 1.25,
+      case: "sentence",
+      tracking: -0.02,
+    },
+    color: {
+      harmony: "monochrome",
+      saturation: "low",
+      neutrals: "cool",
+      darkSurface: false,
+    },
+    shapes: "orthogonal, strict alignment, controlled asymmetry",
+    iconography: "1.5px line, flat terminals",
+    imagery: "documentary photography, desaturated",
+    texture: "none",
+    shadow: "none",
+    layoutSignature: "wide left margin, hairline rule, flag composition",
+    mockup: {
+      lighting: "soft studio",
+      background: "neutral",
+      props: "none",
+      prefer: ["photo-stationery", "photo-business-cards", "photo-reception"],
+      avoid: ["photo-tote"],
+    },
+    sectors: ["corporate", "architecture", "industry", "creative", "tech"],
+    personality: {
+      seriousPlayful: 0.15,
+      classicModern: 0.8,
+      massPremium: 0.65,
+      quietLoud: 0.2,
+    },
+  },
+  {
+    id: "corporate-institutionnel",
+    name: "Institutional",
+    description:
+      "Solid bands, symmetry, and a serif that signals permanence. Built to be trusted rather than admired.",
+    radius: 3,
+    stroke: 1.5,
+    whitespaceRatio: 0.32,
+    grid: { columns: 12, gutter: 20 },
+    type: {
+      display: "humanist",
+      heading: "humanist",
+      body: "serif-transitional",
+      data: "mono",
+      scale: 1.2,
+      case: "sentence",
+      tracking: -0.01,
+    },
+    color: {
+      harmony: "analogous",
+      saturation: "medium",
+      neutrals: "cool",
+      darkSurface: false,
+    },
+    shapes: "rectangular with a small radius, centred masses",
+    iconography: "2px line, rounded terminals",
+    imagery: "people at work, natural light, honest framing",
+    texture: "none",
+    shadow: "soft, shallow",
+    layoutSignature: "full-bleed banner, symmetrical blocks",
+    mockup: {
+      lighting: "soft studio",
+      background: "neutral",
+      props: "trade tools",
+      prefer: ["photo-stationery", "photo-reception", "photo-business-cards"],
+      avoid: ["photo-cup", "photo-pouch"],
+    },
+    sectors: ["legal", "finance", "fintech", "education", "health", "public"],
+    personality: {
+      seriousPlayful: 0.2,
+      classicModern: 0.45,
+      massPremium: 0.5,
+      quietLoud: 0.35,
+    },
+  },
+  {
+    id: "luxe-editorial",
+    name: "Editorial luxury",
+    description:
+      "Enormous margins, spaced capitals, and a high-contrast serif. Confidence expressed as restraint.",
+    radius: 0,
+    stroke: 1,
+    whitespaceRatio: 0.55,
+    grid: { columns: 12, gutter: 32 },
+    type: {
+      display: "didone",
+      heading: "didone",
+      body: "humanist",
+      data: "mono",
+      scale: 1.414,
+      case: "upper",
+      tracking: 0.04,
+    },
+    color: {
+      harmony: "monochrome",
+      saturation: "low",
+      neutrals: "warm",
+      darkSurface: false,
+    },
+    shapes: "thin rules, generous voids, nothing decorative",
+    iconography: "1px line, elongated",
+    imagery: "chiaroscuro still life, few objects",
+    texture: "none",
+    shadow: "deep and soft",
+    layoutSignature: "huge margins, letter-spaced capitals, centred title",
+    mockup: {
+      lighting: "chiaroscuro",
+      background: "deep neutral",
+      props: "minimal",
+      prefer: ["photo-box", "photo-bottle", "photo-business-cards"],
+      avoid: ["photo-tote", "photo-cup"],
+    },
+    sectors: ["luxury", "beauty", "fashion", "hospitality", "jewellery"],
+    personality: {
+      seriousPlayful: 0.2,
+      classicModern: 0.4,
+      massPremium: 0.95,
+      quietLoud: 0.25,
+    },
+  },
+  {
+    id: "tech-futuriste",
+    name: "Technical",
+    description:
+      "Dark surfaces, a mono voice for data, and one luminous accent. Reads as engineered rather than designed.",
+    radius: 6,
+    stroke: 1.5,
+    whitespaceRatio: 0.38,
+    grid: { columns: 12, gutter: 24 },
+    type: {
+      display: "geometric",
+      heading: "geometric",
+      body: "grotesque-contemporary",
+      data: "mono",
+      scale: 1.25,
+      case: "sentence",
+      tracking: -0.025,
+    },
+    color: {
+      harmony: "split-complementary",
+      saturation: "high",
+      neutrals: "cool",
+      darkSurface: true,
+    },
+    shapes: "rounded rectangles, dot grid, precise angles",
+    iconography: "1.5px line, geometric construction",
+    imagery: "abstract renders, long exposure, screens",
+    texture: "fine dot grid",
+    shadow: "glow rather than drop shadow",
+    layoutSignature: "dark panel, monospaced labels, dense data blocks",
+    mockup: {
+      lighting: "backlit",
+      background: "dark",
+      props: "none",
+      prefer: ["photo-reception", "photo-business-cards", "photo-box"],
+      avoid: ["photo-pouch", "photo-bottle", "photo-cup"],
+    },
+    sectors: ["tech", "saas", "data", "security", "fintech"],
+    personality: {
+      seriousPlayful: 0.3,
+      classicModern: 0.95,
+      massPremium: 0.6,
+      quietLoud: 0.55,
+    },
+  },
+  {
+    id: "organique-artisanal",
+    name: "Artisanal",
+    description:
+      "Soft serifs, earth pigments, and visible material. Made by hand, and says so.",
+    radius: 18,
+    stroke: 2,
+    whitespaceRatio: 0.35,
+    grid: { columns: 12, gutter: 20 },
+    type: {
+      display: "serif-soft",
+      heading: "serif-soft",
+      body: "humanist",
+      data: "mono",
+      scale: 1.333,
+      case: "sentence",
+      tracking: -0.015,
+    },
+    color: {
+      harmony: "analogous",
+      saturation: "medium",
+      neutrals: "warm",
+      darkSurface: false,
+    },
+    shapes: "free curves, hand-drawn strokes, stamps",
+    iconography: "2px line, irregular terminals",
+    imagery: "raw materials, hands at work, side light",
+    texture: "paper and kraft",
+    shadow: "natural, directional",
+    layoutSignature: "stamp badge, hand-set label, torn edge",
+    mockup: {
+      lighting: "natural side light",
+      background: "material surface",
+      props: "botanical, raw materials",
+      prefer: ["photo-pouch", "photo-tote", "photo-bottle", "photo-cup"],
+      avoid: ["photo-reception"],
+    },
+    sectors: ["food", "agro", "craft", "eco", "hospitality"],
+    personality: {
+      seriousPlayful: 0.55,
+      classicModern: 0.3,
+      massPremium: 0.55,
+      quietLoud: 0.4,
+    },
+  },
+  {
+    id: "pop-ludique",
+    name: "Playful pop",
+    description:
+      "Pill shapes, saturated triads, and type that shouts. Built to be noticed at a distance.",
+    radius: 999,
+    stroke: 3,
+    whitespaceRatio: 0.25,
+    grid: { columns: 12, gutter: 16 },
+    type: {
+      display: "display",
+      // Heading shares the body's class so the system stays within the
+      // three-family ceiling: one display face carries the personality, one
+      // geometric does the work, one mono handles data.
+      heading: "geometric",
+      body: "geometric",
+      data: "mono",
+      scale: 1.333,
+      case: "sentence",
+      tracking: -0.03,
+    },
+    color: {
+      harmony: "triadic",
+      saturation: "high",
+      neutrals: "warm",
+      darkSurface: false,
+    },
+    shapes: "stacked blobs, rotations, large flat fills",
+    iconography: "3px line, rounded terminals, filled",
+    imagery: "bright product shots, hard shadows",
+    texture: "none",
+    shadow: "hard offset",
+    layoutSignature: "stacked colour blocks, rotated badge, oversized type",
+    mockup: {
+      lighting: "hard sunlit shadows",
+      background: "primary colour",
+      props: "colourful everyday objects",
+      prefer: ["photo-cup", "photo-tote", "photo-pouch"],
+      avoid: ["photo-stationery", "photo-reception"],
+    },
+    sectors: ["food", "retail", "childhood", "sport", "entertainment"],
+    personality: {
+      seriousPlayful: 0.9,
+      classicModern: 0.75,
+      massPremium: 0.25,
+      quietLoud: 0.9,
+    },
+  },
+  {
+    id: "brutaliste",
+    name: "Brutalist",
+    description:
+      "Heavy borders, condensed type, and raw colour. Deliberately unpolished, and impossible to ignore.",
+    radius: 0,
+    stroke: 3,
+    whitespaceRatio: 0.28,
+    grid: { columns: 12, gutter: 16 },
+    type: {
+      display: "grotesque-condensed",
+      heading: "grotesque-condensed",
+      body: "grotesque-neutral",
+      data: "mono",
+      scale: 1.5,
+      case: "upper",
+      tracking: -0.02,
+    },
+    color: {
+      harmony: "complementary",
+      saturation: "high",
+      neutrals: "true",
+      darkSurface: false,
+    },
+    shapes: "hard rectangles, 3px borders, deliberate offsets",
+    iconography: "3px line, blunt terminals",
+    imagery: "high-contrast photocopy, grain",
+    texture: "visible grain",
+    shadow: "none",
+    layoutSignature: "thick frame, misaligned blocks, violent contrast",
+    mockup: {
+      lighting: "hard sunlit shadows",
+      background: "primary colour",
+      props: "none",
+      prefer: ["photo-billboard", "photo-business-cards", "photo-tote"],
+      avoid: ["photo-bottle", "photo-reception"],
+    },
+    sectors: ["creative", "music", "culture", "fashion", "events"],
+    personality: {
+      seriousPlayful: 0.6,
+      classicModern: 0.85,
+      massPremium: 0.35,
+      quietLoud: 0.95,
+    },
+  },
+  {
+    id: "retro-vintage",
+    name: "Retro",
+    description:
+      "Slab type, badges, and burnt-orange warmth. Borrowed credibility from a century of signwriting.",
+    radius: 4,
+    stroke: 2.5,
+    whitespaceRatio: 0.3,
+    grid: { columns: 12, gutter: 20 },
+    type: {
+      display: "slab",
+      heading: "slab",
+      body: "humanist",
+      data: "mono",
+      scale: 1.333,
+      case: "upper",
+      tracking: 0.02,
+    },
+    color: {
+      harmony: "analogous",
+      saturation: "medium",
+      neutrals: "warm",
+      darkSurface: false,
+    },
+    shapes: "arcs, banners, badges, concentric rules",
+    iconography: "2.5px line, filled shapes",
+    imagery: "warm film stock, faded highlights",
+    texture: "halftone",
+    shadow: "flat offset",
+    layoutSignature: "circular badge, ribbon banner, arched wordmark",
+    mockup: {
+      lighting: "natural side light",
+      background: "material surface",
+      props: "trade tools",
+      prefer: ["photo-cup", "photo-pouch", "photo-storefront", "photo-tote"],
+      avoid: ["photo-reception"],
+    },
+    sectors: ["food", "hospitality", "craft", "barber", "brewery"],
+    personality: {
+      seriousPlayful: 0.65,
+      classicModern: 0.2,
+      massPremium: 0.4,
+      quietLoud: 0.6,
+    },
+  },
+  {
+    id: "eco-naturel",
+    name: "Natural",
+    description:
+      "Sage, clay, and cream under a humanist voice. Calm without being weightless.",
+    radius: 12,
+    stroke: 1.5,
+    whitespaceRatio: 0.42,
+    grid: { columns: 12, gutter: 24 },
+    type: {
+      display: "humanist",
+      heading: "humanist",
+      body: "humanist",
+      data: "mono",
+      scale: 1.25,
+      case: "sentence",
+      tracking: -0.01,
+    },
+    color: {
+      harmony: "analogous",
+      saturation: "low",
+      neutrals: "warm",
+      darkSurface: false,
+    },
+    shapes: "soft rounded rectangles, organic curves",
+    iconography: "1.5px line, rounded terminals",
+    imagery: "botanical, daylight, unstyled",
+    texture: "kraft paper",
+    shadow: "soft, natural",
+    layoutSignature: "generous leading, botanical rule, soft panel",
+    mockup: {
+      lighting: "natural side light",
+      background: "material surface",
+      props: "botanical",
+      prefer: ["photo-tote", "photo-pouch", "photo-bottle", "photo-stationery"],
+      avoid: ["photo-billboard"],
+    },
+    sectors: ["eco", "health", "wellness", "agro", "beauty"],
+    personality: {
+      seriousPlayful: 0.45,
+      classicModern: 0.55,
+      massPremium: 0.5,
+      quietLoud: 0.2,
+    },
+  },
+  {
+    id: "premium-sombre",
+    name: "Dark premium",
+    description:
+      "Anthracite and brass, very shallow gradients, deep shadow. Expensive without saying the word.",
+    radius: 6,
+    stroke: 1,
+    whitespaceRatio: 0.48,
+    grid: { columns: 12, gutter: 28 },
+    type: {
+      display: "grotesque-contemporary",
+      heading: "grotesque-contemporary",
+      body: "serif-transitional",
+      data: "mono",
+      scale: 1.333,
+      case: "sentence",
+      tracking: -0.02,
+    },
+    color: {
+      harmony: "monochrome",
+      saturation: "low",
+      neutrals: "warm",
+      darkSurface: true,
+    },
+    shapes: "restrained rounded rectangles, thin metallic rules",
+    iconography: "1px line, fine detail",
+    imagery: "low-key product photography, single light",
+    texture: "very subtle gradient",
+    shadow: "deep and diffuse",
+    layoutSignature: "dark field, thin rule, small caps label",
+    mockup: {
+      lighting: "chiaroscuro",
+      background: "dark",
+      props: "minimal",
+      prefer: ["photo-box", "photo-bottle", "photo-desk", "photo-business-cards"],
+      avoid: ["photo-tote", "photo-cup"],
+    },
+    sectors: ["luxury", "finance", "automotive", "hospitality", "tech"],
+    personality: {
+      seriousPlayful: 0.15,
+      classicModern: 0.7,
+      massPremium: 0.9,
+      quietLoud: 0.3,
+    },
+  },
+];
+
+const BY_ID = new Map(ART_DIRECTIONS.map((ad) => [ad.id, ad]));
+
+export function artDirectionById(id: string): ArtDirection | undefined {
+  return BY_ID.get(id);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Deterministic seed                                                        */
+/* -------------------------------------------------------------------------- */
+
+/** FNV-1a. Stable across runs and platforms, which is the whole point. */
+export function hashString(input: string): number {
+  let hash = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return Math.abs(hash);
+}
+
+/**
+ * The seed the whole system derives from.
+ *
+ * Note the two stages. The art direction is chosen from a seed built out of the
+ * name and sector alone, because the spec's `hash(name + sector + direction)`
+ * would otherwise need the direction before it could pick one. Once chosen, the
+ * direction folds back in, so everything downstream varies with it — and a
+ * brand that keeps its name, sector and direction always regenerates
+ * identically.
+ */
+export function baseSeed(name: string, sector: string): number {
+  return hashString(`${name.trim().toLowerCase()}|${sector}`);
+}
+
+export function brandSeed(
+  name: string,
+  sector: string,
+  artDirectionId: string,
+): number {
+  return hashString(
+    `${name.trim().toLowerCase()}|${sector}|${artDirectionId}`,
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Selection                                                                 */
+/* -------------------------------------------------------------------------- */
+
+function personalityDistance(a: Personality, b: Personality): number {
+  return (
+    Math.abs(a.seriousPlayful - b.seriousPlayful) +
+    Math.abs(a.classicModern - b.classicModern) +
+    Math.abs(a.massPremium - b.massPremium) +
+    Math.abs(a.quietLoud - b.quietLoud)
+  ) / 4;
+}
+
+/** How far a profile sits from the bland centre. */
+function extremity(p: Personality): number {
+  return personalityDistance(p, NEUTRAL_PERSONALITY);
+}
+
+function isNeutral(p: Personality | undefined): boolean {
+  return !p || extremity(p) < 0.12;
+}
+
+/** Keyword hooks that let the brief's own words pull toward a profile. */
+const VALUE_HOOKS: Record<string, string[]> = {
+  "minimal-suisse": ["minimal", "precise", "precision", "rigour", "rigor", "clarity", "systematic", "swiss", "clean"],
+  "corporate-institutionnel": ["trust", "trusted", "reliable", "established", "institutional", "compliance", "secure", "serious"],
+  "luxe-editorial": ["luxury", "premium", "refined", "elegant", "couture", "exclusive", "bespoke", "haute"],
+  "tech-futuriste": ["technical", "engineering", "data", "platform", "infrastructure", "developer", "api", "futuristic"],
+  "organique-artisanal": ["craft", "handmade", "artisan", "slow", "small-batch", "traditional", "sourcing", "roast"],
+  "pop-ludique": ["fun", "playful", "bold", "energetic", "young", "vibrant", "joyful", "loud"],
+  "brutaliste": ["raw", "unfiltered", "radical", "provocative", "opinionated", "counter", "underground"],
+  "retro-vintage": ["heritage", "vintage", "retro", "classic", "since", "old-school", "nostalgic"],
+  "eco-naturel": ["natural", "eco", "sustainable", "organic", "calm", "gentle", "wellbeing", "wellness", "green"],
+  "premium-sombre": ["premium", "discreet", "understated", "sophisticated", "exclusive", "high-end", "quiet luxury"],
+};
+
+export interface SelectionInput {
+  name: string;
+  sector: string;
+  keywords: string;
+  personality?: Personality;
+  /** Explicit override — the user picked a direction themselves. */
+  preferred?: string;
+}
+
+export interface SelectionResult {
+  direction: ArtDirection;
+  seed: number;
+  /** Why this profile, in one sentence, for the guide. */
+  rationale: string;
+  /** Ranked runners-up, offered in the wizard. */
+  alternatives: ArtDirection[];
+}
+
+/**
+ * Chooses the art direction.
+ *
+ * Scoring is sector first, then the brief's own vocabulary. Personality only
+ * participates when the user actually expressed one — the spec is explicit that
+ * a brief sitting at the middle of all four axes must *not* collapse onto a
+ * safe house style, so in that case the score rewards profiles that are far
+ * from neutral instead. A bland brief gets an opinionated direction, which is
+ * the opposite of what averaging would produce.
+ */
+export function selectArtDirection(input: SelectionInput): SelectionResult {
+  const seed = baseSeed(input.name, input.sector);
+
+  if (input.preferred) {
+    const forced = artDirectionById(input.preferred);
+    if (forced) {
+      return {
+        direction: forced,
+        seed: brandSeed(input.name, input.sector, forced.id),
+        rationale: `${forced.name} was chosen explicitly.`,
+        alternatives: ART_DIRECTIONS.filter((ad) => ad.id !== forced.id).slice(0, 3),
+      };
+    }
+  }
+
+  const words = `${input.keywords} ${input.sector}`.toLowerCase();
+  const neutral = isNeutral(input.personality);
+
+  const scored = ART_DIRECTIONS.map((direction) => {
+    const sectorHit = direction.sectors.includes(input.sector) ? 3 : 0;
+
+    const hooks = VALUE_HOOKS[direction.id] ?? [];
+    const valueHits = hooks.filter((hook) => words.includes(hook)).length;
+
+    const personalityTerm = neutral
+      ? // No stated personality: reward conviction rather than safety.
+        extremity(direction.personality) * 2
+      : -personalityDistance(direction.personality, input.personality!) * 4;
+
+    return {
+      direction,
+      score: sectorHit + valueHits * 1.5 + personalityTerm,
+    };
+  }).sort((a, b) => b.score - a.score);
+
+  // Rotate within the leading band so two brands in one sector still diverge,
+  // while never dropping to a profile the sector contradicts.
+  const top = scored.filter((s) => s.score >= scored[0].score - 1.0);
+  const chosen = top[seed % top.length].direction;
+
+  return {
+    direction: chosen,
+    seed: brandSeed(input.name, input.sector, chosen.id),
+    rationale: buildRationale(chosen, input, neutral),
+    alternatives: scored
+      .map((s) => s.direction)
+      .filter((d) => d.id !== chosen.id)
+      .slice(0, 3),
+  };
+}
+
+function buildRationale(
+  direction: ArtDirection,
+  input: SelectionInput,
+  neutral: boolean,
+): string {
+  const sectorFit = direction.sectors.includes(input.sector)
+    ? `It is a natural fit for ${input.sector}`
+    : `It cuts against the default look of ${input.sector}`;
+
+  return neutral
+    ? `${sectorFit}, and the brief left personality open — so the system committed to one clear position rather than averaging to a safe middle. ${direction.description}`
+    : `${sectorFit}, and it matches the personality you set. ${direction.description}`;
+}
+
+/** Reads personality out of free-text keywords when no sliders were set. */
+export function inferPersonality(keywords: string): Personality | undefined {
+  const words = keywords.toLowerCase();
+  const axes = { ...NEUTRAL_PERSONALITY };
+  let moved = false;
+
+  const nudge = (
+    axis: keyof Personality,
+    hooks: string[],
+    value: number,
+  ) => {
+    if (hooks.some((hook) => words.includes(hook))) {
+      axes[axis] = value;
+      moved = true;
+    }
+  };
+
+  nudge("seriousPlayful", ["playful", "fun", "joyful", "cheeky", "vibrant"], 0.85);
+  nudge("seriousPlayful", ["serious", "rigorous", "clinical", "precise", "formal"], 0.15);
+  nudge("classicModern", ["modern", "contemporary", "futuristic", "tech"], 0.85);
+  nudge("classicModern", ["heritage", "traditional", "classic", "timeless"], 0.2);
+  nudge("massPremium", ["premium", "luxury", "bespoke", "high-end", "exclusive"], 0.9);
+  nudge("massPremium", ["affordable", "accessible", "everyday", "mass"], 0.2);
+  nudge("quietLoud", ["bold", "loud", "energetic", "striking"], 0.85);
+  nudge("quietLoud", ["quiet", "calm", "understated", "discreet", "subtle"], 0.15);
+
+  return moved ? axes : undefined;
+}
