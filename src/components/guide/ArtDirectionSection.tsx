@@ -1,16 +1,17 @@
 import { Check, X } from "lucide-react";
 import type { BrandGuide } from "@/lib/types";
 import { SCALE_STEPS } from "@/lib/ai/palette";
+import { fr, HARMONY_FR, NEUTRALS_FR, SATURATION_FR } from "@/lib/labels-fr";
 
 const AXES: Array<{
   key: keyof BrandGuide["strategy"]["artDirection"]["personality"];
   left: string;
   right: string;
 }> = [
-  { key: "seriousPlayful", left: "Serious", right: "Playful" },
-  { key: "classicModern", left: "Classic", right: "Modern" },
-  { key: "massPremium", left: "Mass-market", right: "Premium" },
-  { key: "quietLoud", left: "Quiet", right: "Loud" },
+  { key: "seriousPlayful", left: "Sérieuse", right: "Ludique" },
+  { key: "classicModern", left: "Classique", right: "Moderne" },
+  { key: "massPremium", left: "Grand public", right: "Haut de gamme" },
+  { key: "quietLoud", left: "Discrète", right: "Voyante" },
 ];
 
 /**
@@ -22,23 +23,23 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
   const { artDirection: ad, artDirectionRationale, seed } = guide.strategy;
 
   const tokens: Array<[string, string]> = [
-    ["Corner radius", ad.radius >= 999 ? "Full (pill)" : `${ad.radius}px`],
-    ["Stroke", `${ad.stroke}px`],
-    ["Type scale", `${ad.type.scale}`],
-    ["Colour harmony", ad.color.harmony.replace("-", " ")],
-    ["Saturation", ad.color.saturation],
-    ["Neutrals", `${ad.color.neutrals} tinted`],
-    ["White space", `${Math.round(ad.whitespaceRatio * 100)}%`],
-    ["Grid", `${ad.grid.columns} columns · ${ad.grid.gutter}px gutter`],
+    ["Arrondi des angles", ad.radius >= 999 ? "Complet (pilule)" : `${ad.radius} px`],
+    ["Épaisseur de trait", `${ad.stroke} px`],
+    ["Échelle typographique", `${ad.type.scale}`],
+    ["Harmonie", fr(HARMONY_FR, ad.color.harmony)],
+    ["Saturation", fr(SATURATION_FR, ad.color.saturation)],
+    ["Neutres", fr(NEUTRALS_FR, ad.color.neutrals)],
+    ["Espace blanc", `${Math.round(ad.whitespaceRatio * 100)} %`],
+    ["Grille", `${ad.grid.columns} colonnes · gouttière ${ad.grid.gutter} px`],
   ];
 
   const language: Array<[string, string]> = [
-    ["Shapes", ad.shapes],
-    ["Iconography", ad.iconography],
-    ["Imagery", ad.imagery],
+    ["Formes", ad.shapes],
+    ["Icônes", ad.iconography],
+    ["Images", ad.imagery],
     ["Texture", ad.texture],
-    ["Shadow", ad.shadow],
-    ["Layout signature", ad.layoutSignature],
+    ["Ombre", ad.shadow],
+    ["Mise en page", ad.layoutSignature],
   ];
 
   return (
@@ -47,14 +48,14 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent-soft">
-              Art direction
+              Direction artistique
             </p>
             <h3 className="mt-2 font-display text-[clamp(1.5rem,3vw,2rem)] font-extrabold tracking-[-0.025em]">
               {ad.name}
             </h3>
           </div>
           <p className="font-mono text-[11px] text-white/65">
-            seed {seed.toString(16)}
+            graine {seed.toString(16)}
           </p>
         </div>
 
@@ -86,7 +87,7 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-line bg-white p-6">
           <h3 className="mb-4 text-[13px] font-bold uppercase tracking-[0.1em]">
-            Tokens
+            Variables
           </h3>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3">
             {tokens.map(([label, value]) => (
@@ -104,7 +105,7 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
 
         <div className="rounded-xl border border-line bg-white p-6">
           <h3 className="mb-4 text-[13px] font-bold uppercase tracking-[0.1em]">
-            Visual language
+            Langage visuel
           </h3>
           <dl className="space-y-2.5">
             {language.map(([label, value]) => (
@@ -124,11 +125,10 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
       {/* Tonal scale — what a developer actually needs to implement the brand */}
       <div className="rounded-xl border border-line bg-white p-6">
         <h3 className="mb-1 text-[13px] font-bold uppercase tracking-[0.1em]">
-          Primary scale
+          Nuances de la couleur principale
         </h3>
         <p className="mb-4 text-[13px] text-ink-muted">
-          Derived in OKLCH, so each step is a perceptually even move rather than
-          an arithmetic one.
+          Calculées en OKLCH : chaque palier paraît régulier à l’œil, pas seulement en chiffres.
         </p>
 
         <div className="scroll-x">
@@ -154,7 +154,7 @@ export function ArtDirectionSection({ guide }: { guide: BrandGuide }) {
       {/* Contrast report — the QC gate, published rather than hidden */}
       <div className="rounded-xl border border-line bg-white p-6">
         <h3 className="mb-4 text-[13px] font-bold uppercase tracking-[0.1em]">
-          Contrast checks
+          Contrôles de contraste
         </h3>
         <ul className="space-y-2">
           {guide.contrastReport.map((check) => (

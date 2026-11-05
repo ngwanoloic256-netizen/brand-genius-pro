@@ -9,6 +9,7 @@
  */
 
 import { inlineExternalImages } from "./inline-images";
+import { embedSvgFonts } from "./fonts";
 
 function triggerDownload(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
@@ -55,7 +56,7 @@ export async function downloadPng(
   // An SVG loaded through `new Image()` cannot fetch external resources, so a
   // mockup's backplate has to be inlined before rasterising or it renders
   // blank. No-op for artwork that references nothing.
-  const source = await inlineExternalImages(svg);
+  const source = await embedSvgFonts(await inlineExternalImages(svg));
 
   const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -68,7 +69,7 @@ export async function downloadPng(
     canvas.height = Math.round(height * scale);
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas is unavailable in this browser.");
+    if (!ctx) throw new Error("Ce navigateur ne permet pas de dessiner l’image.");
 
     // No fillRect — leaving the canvas untouched is what preserves alpha.
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -76,7 +77,7 @@ export async function downloadPng(
     const png = await new Promise<Blob | null>((resolve) =>
       canvas.toBlob(resolve, "image/png"),
     );
-    if (!png) throw new Error("Could not encode the PNG.");
+    if (!png) throw new Error("Impossible de créer le PNG.");
 
     triggerDownload(png, `${filename}.png`);
   } finally {
@@ -89,7 +90,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     const image = new Image();
     image.onload = () => resolve(image);
     image.onerror = () =>
-      reject(new Error("Could not rasterise this SVG in the browser."));
+      reject(new Error("Impossible de convertir ce SVG dans le navigateur."));
     image.src = src;
   });
 }

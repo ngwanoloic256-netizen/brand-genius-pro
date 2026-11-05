@@ -119,7 +119,7 @@ export function SurfaceScroller({ slides }: { slides: ShowcaseSlide[] }) {
       <ul
         ref={track}
         tabIndex={0}
-        aria-label="BRAND GENIUS applied across surfaces"
+        aria-label="BRAND GENIUS appliqué sur différents supports"
         className="scroll-x flex gap-5 pb-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-iris-soft md:overflow-visible"
       >
         {slides.map((slide, i) => (

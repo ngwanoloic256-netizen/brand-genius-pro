@@ -17,14 +17,14 @@ import type { BrandDirection, CreationMode } from "@/lib/types";
 import { NEUTRAL_PERSONALITY, type Personality } from "@/lib/ai/art-direction";
 import { PersonalitySliders } from "./PersonalitySliders";
 
-const STEPS = ["Brief", "Logo", "Direction", "Generate"] as const;
+const STEPS = ["Brief", "Logo", "Direction", "Création"] as const;
 
 const STAGES = [
-  "Analysing the brand",
-  "Building the colour palette",
-  "Selecting typography",
-  "Drawing the logo system",
-  "Generating mockups",
+  "Analyse de la marque",
+  "Création de la palette",
+  "Choix des polices",
+  "Dessin du logo",
+  "Création des mockups et du kit réseaux sociaux",
 ] as const;
 
 interface WizardProps {
@@ -36,6 +36,7 @@ export function BrandWizard({ mode }: WizardProps) {
 
   const [step, setStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [upgradeHref, setUpgradeHref] = useState<string | null>(null);
 
   // Step 1 — the brief
   const [name, setName] = useState("");
@@ -90,11 +91,11 @@ export function BrandWizard({ mode }: WizardProps) {
         body: JSON.stringify({ ...brief(), personality: statedPersonality() }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Could not load directions.");
+      if (!res.ok) throw new Error(data.error ?? "Impossible de charger les directions.");
       setDirections(data.directions);
       setChosen(data.directions[0]?.id ?? null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : "Une erreur est survenue.");
     } finally {
       setLoadingDirections(false);
     }
@@ -126,7 +127,8 @@ export function BrandWizard({ mode }: WizardProps) {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Generation failed.");
+      if (res.status === 402 && data.upgrade) setUpgradeHref(data.upgrade);
+      if (!res.ok) throw new Error(data.error ?? "La création a échoué.");
 
       clearInterval(timer);
       setStage(STAGES.length - 1);
@@ -134,7 +136,7 @@ export function BrandWizard({ mode }: WizardProps) {
     } catch (err) {
       clearInterval(timer);
       setGenerating(false);
-      setError(err instanceof Error ? err.message : "Generation failed.");
+      setError(err instanceof Error ? err.message : "La création a échoué.");
     }
   }
 
@@ -142,7 +144,7 @@ export function BrandWizard({ mode }: WizardProps) {
     setError(null);
     if (step === 0) {
       if (!briefValid) {
-        setError("Fill in the name, sector, and what the brand stands for.");
+        setError("Renseignez le nom, le secteur et ce que défend la marque.");
         return;
       }
       setStep(needsLogoStep ? 1 : 2);
@@ -151,7 +153,7 @@ export function BrandWizard({ mode }: WizardProps) {
     }
     if (step === 1) {
       if (mode === "import_logo" && !importedLogo) {
-        setError("Upload an SVG logo, or go back and choose to generate one.");
+        setError("Envoyez un logo SVG, ou revenez en arrière pour en faire créer un.");
         return;
       }
       setStep(2);
@@ -180,7 +182,17 @@ export function BrandWizard({ mode }: WizardProps) {
           className="mt-6 flex items-start gap-2.5 rounded-xl border border-signal/30 bg-signal/5 p-3.5 text-sm text-signal-deep"
         >
           <AlertCircle size={17} className="mt-px shrink-0" />
-          <span>{error}</span>
+          <span>
+            {error}
+            {upgradeHref && (
+              <>
+                {" "}
+                <a href={upgradeHref} className="font-semibold underline">
+                  Voir les offres
+                </a>
+              </>
+            )}
+          </span>
         </div>
       )}
 
@@ -232,7 +244,7 @@ export function BrandWizard({ mode }: WizardProps) {
       {step < 3 && (
         <div className="mt-10 flex items-center justify-between border-t border-line pt-6">
           <Button variant="ghost" onClick={back} disabled={step === 0}>
-            <ArrowLeft size={16} /> Back
+            <ArrowLeft size={16} /> Retour
           </Button>
           <Button
             onClick={next}
@@ -242,7 +254,7 @@ export function BrandWizard({ mode }: WizardProps) {
               (step === 2 && (loadingDirections || !chosen))
             }
           >
-            {step === 2 ? "Generate the brand guide" : "Continue"}
+            {step === 2 ? "Créer la charte graphique" : "Continuer"}
             <ArrowRight size={16} />
           </Button>
         </div>
@@ -255,7 +267,7 @@ export function BrandWizard({ mode }: WizardProps) {
 
 function Stepper({ current }: { current: number }) {
   return (
-    <ol className="flex items-center gap-2" aria-label="Progress">
+    <ol className="flex items-center gap-2" aria-label="Progression">
       {STEPS.map((label, i) => {
         const done = i < current;
         const active = i === current;
@@ -333,54 +345,53 @@ function BriefStep(props: {
   return (
     <div className="animate-rise">
       <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-        Tell us about the brand
+        Parlez-nous de la marque
       </h2>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-        The more specific the description, the less generic the result. Write
-        the way you would brief a designer.
+        Plus la description est précise, plus le résultat est personnel. Écrivez comme si vous briefiez un graphiste.
       </p>
 
       <div className="mt-7 grid gap-5">
-        <Field label="Brand name">
+        <Field label="Nom de la marque">
           <input
             className={INPUT}
             value={props.name}
             onChange={(e) => props.setName(e.target.value)}
-            placeholder="Lumen Roasters"
+            placeholder="Saveurs de Douala"
             maxLength={80}
             autoFocus
           />
         </Field>
 
-        <Field label="Sector">
+        <Field label="Secteur">
           <input
             className={INPUT}
             value={props.industry}
             onChange={(e) => props.setIndustry(e.target.value)}
-            placeholder="Specialty coffee roastery"
+            placeholder="Pâtisserie artisanale"
             maxLength={120}
           />
         </Field>
 
         <Field
-          label="What it stands for"
-          hint="Values, personality, and what makes it different. A few phrases is plenty."
+          label="Ce que défend la marque"
+          hint="Valeurs, personnalité et ce qui la rend unique. Quelques phrases suffisent."
         >
           <textarea
             className={`${INPUT} min-h-28 resize-y leading-relaxed`}
             value={props.keywords}
             onChange={(e) => props.setKeywords(e.target.value)}
-            placeholder="Single-origin, transparent sourcing, slow craft, a neighbourhood ritual rather than a chain"
+            placeholder="Fait maison, ingrédients locaux, gourmandise généreuse, un rendez-vous de quartier plutôt qu’une chaîne"
             maxLength={600}
           />
         </Field>
 
-        <Field label="Audience" hint="Optional, but it sharpens the tone of voice.">
+        <Field label="Public visé" hint="Facultatif, mais cela affine le ton de la marque.">
           <input
             className={INPUT}
             value={props.audience}
             onChange={(e) => props.setAudience(e.target.value)}
-            placeholder="City-centre regulars who care where the beans came from"
+            placeholder="Les familles et les jeunes actifs de Douala qui aiment se faire plaisir"
             maxLength={200}
           />
         </Field>
@@ -413,16 +424,16 @@ function LogoStep({
 
   async function handleFile(file: File) {
     if (file.size > 400_000) {
-      onError("That file is over 400 KB. Export a simplified SVG and retry.");
+      onError("Ce fichier dépasse 400 Ko. Exportez un SVG simplifié et réessayez.");
       return;
     }
     if (!file.name.toLowerCase().endsWith(".svg")) {
-      onError("Upload an SVG. Raster logos cannot be turned into vector variants.");
+      onError("Envoyez un fichier SVG. Une image PNG ou JPG ne peut pas être déclinée en versions vectorielles.");
       return;
     }
     const text = await file.text();
     if (!/<svg[\s>]/i.test(text)) {
-      onError("That file does not contain an SVG root element.");
+      onError("Ce fichier ne contient pas de SVG valide.");
       return;
     }
     onImport(text, file.name);
@@ -432,21 +443,19 @@ function LogoStep({
     return (
       <div className="animate-rise">
         <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-          We&apos;ll draw the mark
+          Nous dessinons le logo
         </h2>
         <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-          The logo is generated as a vector, then composed into five variants —
-          full colour, monochrome, inverted, icon-only, and horizontal — so
-          every placement is covered.
+          Le logo est créé en vectoriel, puis décliné en cinq versions (couleur, monochrome, inversé, icône seule et horizontal) pour couvrir tous les usages.
         </p>
         <div className="mt-7 rounded-xl border border-line bg-white p-5">
-          <p className="text-eyebrow mb-3">What you get</p>
+          <p className="text-eyebrow mb-3">Ce que vous obtenez</p>
           <ul className="grid gap-2.5 text-sm text-ink-muted sm:grid-cols-2">
             {[
-              "Scalable SVG, transparent background",
-              "PNG and PDF exports",
-              "Clear-space and minimum-size rules",
-              "Do's and don'ts for placement",
+              "SVG redimensionnable, fond transparent",
+              "Exports PNG et PDF",
+              "Règles de zone de protection et de taille minimale",
+              "Ce qu’il faut faire et éviter",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2">
                 <Check size={15} className="mt-0.5 shrink-0 text-positive" />
@@ -462,11 +471,10 @@ function LogoStep({
   return (
     <div className="animate-rise">
       <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-        Upload your logo
+        Envoyez votre logo
       </h2>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-        SVG only — the whole system is derived from the vector, including the
-        mockups and the inverted variant.
+        SVG uniquement : tout le système part du vectoriel, y compris les mockups et la version inversée.
       </p>
 
       <button
@@ -481,15 +489,15 @@ function LogoStep({
               className="grid h-24 place-items-center [&>svg]:max-h-24 [&>svg]:max-w-40"
             />
             <span className="text-sm font-semibold">{importName}</span>
-            <span className="text-xs text-ink-muted">Click to replace</span>
+            <span className="text-xs text-ink-muted">Cliquez pour remplacer</span>
           </>
         ) : (
           <>
             <span className="grid size-11 place-items-center rounded-full bg-bone-deep text-ink-muted">
               <Upload size={19} />
             </span>
-            <span className="text-sm font-semibold">Choose an SVG file</span>
-            <span className="text-xs text-ink-muted">Up to 400 KB</span>
+            <span className="text-sm font-semibold">Choisir un fichier SVG</span>
+            <span className="text-xs text-ink-muted">Jusqu’à 400 Ko</span>
           </>
         )}
       </button>
@@ -508,8 +516,7 @@ function LogoStep({
 
       <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink-muted">
         <FileWarning size={14} className="mt-px shrink-0" />
-        Uploaded markup is stripped of scripts, styles, and external references
-        before it is rendered anywhere.
+        Les scripts, styles et liens externes du fichier sont retirés avant tout affichage.
       </p>
     </div>
   );
@@ -532,7 +539,7 @@ function DirectionStep({
     return (
       <div className="animate-rise">
         <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-          Exploring directions
+          Recherche de directions
         </h2>
         <div className="mt-7 grid gap-4 sm:grid-cols-2">
           {[0, 1, 2, 3].map((i) => (
@@ -544,7 +551,7 @@ function DirectionStep({
         </div>
         {!loading && !directions && (
           <Button variant="secondary" className="mt-5" onClick={onRetry}>
-            Retry
+            Réessayer
           </Button>
         )}
       </div>
@@ -554,11 +561,10 @@ function DirectionStep({
   return (
     <div className="animate-rise">
       <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-        Pick a direction
+        Choisissez une direction
       </h2>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-        Each one is a real preview — the same mark under a different colour
-        temperature. You can regenerate any section afterwards.
+        Chaque aperçu est réel : le même logo avec une autre ambiance de couleurs. Vous pourrez refaire n’importe quelle section ensuite.
       </p>
 
       <div className="mt-7 grid gap-4 sm:grid-cols-2">
@@ -635,10 +641,10 @@ function GeneratingStep({
   return (
     <div className="animate-rise py-8">
       <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-        Building the identity{dots}
+        Création de l’identité{dots}
       </h2>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-        This usually takes under a minute. Leave the tab open.
+        Cela prend en général moins d’une minute. Laissez l’onglet ouvert.
       </p>
 
       <ol className="mt-8 grid gap-2.5">

@@ -66,7 +66,7 @@ export interface PhotoScene {
 export const PHOTO_SCENES: PhotoScene[] = [
   {
     id: "photo-business-cards",
-    title: "Business cards",
+    title: "Cartes de visite",
     category: "print",
     family: "flat-lay",
     file: "cards.jpg",
@@ -87,7 +87,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-storefront",
-    title: "Shopfront sign",
+    title: "Enseigne de boutique",
     category: "environmental",
     family: "signage",
     file: "storefront.jpg",
@@ -100,7 +100,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-cup",
-    title: "Takeaway cup",
+    title: "Gobelet à emporter",
     category: "packaging",
     family: "product-closeup",
     file: "cup.jpg",
@@ -113,7 +113,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-pouch",
-    title: "Stand-up pouch",
+    title: "Sachet doypack",
     category: "packaging",
     family: "product-closeup",
     file: "pouch.jpg",
@@ -126,7 +126,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-box",
-    title: "Product box",
+    title: "Boîte produit",
     category: "packaging",
     family: "product-closeup",
     file: "box.jpg",
@@ -139,7 +139,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-bottle",
-    title: "Bottle label",
+    title: "Étiquette de bouteille",
     category: "packaging",
     family: "product-closeup",
     file: "bottle.jpg",
@@ -165,7 +165,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-reception",
-    title: "Reception wall",
+    title: "Mur d’accueil",
     category: "environmental",
     family: "signage",
     file: "reception.jpg",
@@ -178,7 +178,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-billboard",
-    title: "Billboard",
+    title: "Panneau publicitaire",
     category: "environmental",
     family: "signage",
     file: "billboard.jpg",
@@ -191,7 +191,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-stationery",
-    title: "Letterhead",
+    title: "Papier à en-tête",
     category: "print",
     family: "flat-lay",
     file: "stationery.jpg",
@@ -204,7 +204,7 @@ export const PHOTO_SCENES: PhotoScene[] = [
   },
   {
     id: "photo-desk",
-    title: "Notebook",
+    title: "Carnet",
     category: "print",
     family: "lifestyle",
     file: "desk.jpg",
@@ -240,7 +240,12 @@ function lockupBlock(
   textColor: string,
   withText: boolean,
 ): { inner: string; width: number; height: number } {
-  const painted = paintMark(ctx.markup, markColor, accentColor);
+  let painted = paintMark(ctx.markup, markColor, accentColor);
+  // Monogramme de secours peint clair sur fond sombre : ses initiales blanches
+  // disparaîtraient dans la forme ; elles prennent la couleur de l'encre.
+  if (markColor === ctx.paper) {
+    painted = painted.replace(/(<text\b[^>]*\bfill=")(#fff(?:fff)?|white)(")/gi, `$1${ctx.ink}$3`);
+  }
 
   if (!withText) {
     return { inner: painted, width: 100, height: 100 };
@@ -340,12 +345,33 @@ export function renderPhotoScene(scene: PhotoScene, ctx: SceneContext): string {
     (p.oy * H).toFixed(3),
   ].join(" ");
 
+  /*
+   * Réalisme : la lumière de la photo passe sur l'encre.
+   *
+   * Une encre posée à plat reste parfaitement uniforme alors que le support
+   * autour d'elle a des ombres, un grain, un pli. On redessine donc la photo
+   * par-dessus le logo, uniquement à l'intérieur du logo (masque), en mode
+   * « produit » sur fond clair (les ombres du support assombrissent l'encre) et
+   * en « lumière douce » sur fond sombre (les reflets passent sans ternir le
+   * blanc). Un très léger flou imite l'encre qui boit dans la matière.
+   *
+   * Ces calques portent `data-realism` : l'export PDF, qui ne gère pas les modes
+   * de fusion, les retire et garde le logo net.
+   */
+  const uid = `ps-${scene.id}`;
+  const artwork = `<g transform="matrix(${matrix})"><g transform="${fitTransform(lockup.width, lockup.height)}">${lockup.inner}</g></g>`;
+  const maskArt = `<g transform="matrix(${matrix})"><g transform="${fitTransform(lockup.width, lockup.height)}" style="filter:brightness(0) invert(1)">${lockup.inner}</g></g>`;
+  const blend = onDark ? "soft-light" : "multiply";
+  const blendOpacity = onDark ? 0.45 : 0.85;
+  const plate = `href="/mockups/${scene.file}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"`;
+
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(ctx.brandName)} ${esc(scene.title.toLowerCase())}">`,
-    `<image href="/mockups/${scene.file}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"/>`,
-    `<g transform="matrix(${matrix})" opacity="${scene.inkOpacity ?? 0.92}">`,
-    `<g transform="${fitTransform(lockup.width, lockup.height)}">${lockup.inner}</g>`,
-    `</g>`,
+    `<defs data-realism="1"><filter id="${uid}-ink" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${(Math.min(W, H) / 1400).toFixed(2)}"/></filter>`,
+    `<mask id="${uid}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="black"/>${maskArt}</mask></defs>`,
+    `<image ${plate}/>`,
+    `<g opacity="${scene.inkOpacity ?? 0.92}" filter="url(#${uid}-ink)">${artwork}</g>`,
+    `<image data-realism="1" ${plate} mask="url(#${uid}-mask)" opacity="${blendOpacity}" style="mix-blend-mode:${blend}"/>`,
     `</svg>`,
   ].join("");
 }

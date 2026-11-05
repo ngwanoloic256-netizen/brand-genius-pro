@@ -8,12 +8,12 @@ import { z } from "zod";
  */
 
 export const BriefSchema = z.object({
-  name: z.string().trim().min(1, "Brand name is required").max(80),
-  industry: z.string().trim().min(1, "Sector is required").max(120),
+  name: z.string().trim().min(1, "Le nom de la marque est obligatoire").max(80),
+  industry: z.string().trim().min(1, "Le secteur est obligatoire").max(120),
   keywords: z
     .string()
     .trim()
-    .min(3, "Describe what the brand stands for")
+    .min(3, "Décrivez ce que défend la marque")
     .max(600),
   audience: z.string().trim().max(200).optional(),
   /**

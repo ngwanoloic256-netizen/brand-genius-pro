@@ -72,7 +72,7 @@ export async function listProjects(): Promise<Project[]> {
     .select(COLUMNS)
     .order("updated_at", { ascending: false });
 
-  if (error) throw new Error(`Could not load projects: ${error.message}`);
+  if (error) throw new Error(`Impossible de charger les projets : ${error.message}`);
   return (data as ProjectRow[]).map(fromRow);
 }
 
@@ -90,7 +90,7 @@ export async function getProject(id: string): Promise<Project | null> {
     .maybeSingle();
 
   // RLS turns "not yours" into "not found", which is the behaviour we want.
-  if (error) throw new Error(`Could not load project: ${error.message}`);
+  if (error) throw new Error(`Impossible de charger le projet : ${error.message}`);
   return data ? fromRow(data as ProjectRow) : null;
 }
 
@@ -119,7 +119,7 @@ export async function createProject(
   }
 
   const user = await getUser();
-  if (!user) throw new Error("You must be signed in to create a project.");
+  if (!user) throw new Error("Connectez-vous pour créer un projet.");
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -137,7 +137,7 @@ export async function createProject(
     .select(COLUMNS)
     .single();
 
-  if (error) throw new Error(`Could not create project: ${error.message}`);
+  if (error) throw new Error(`Impossible de créer le projet : ${error.message}`);
   return fromRow(data as ProjectRow);
 }
 
@@ -161,7 +161,7 @@ export async function updateProject(
     .select(COLUMNS)
     .maybeSingle();
 
-  if (error) throw new Error(`Could not update project: ${error.message}`);
+  if (error) throw new Error(`Impossible de modifier le projet : ${error.message}`);
   return data ? fromRow(data as ProjectRow) : null;
 }
 
@@ -173,5 +173,5 @@ export async function deleteProject(id: string): Promise<void> {
 
   const supabase = await createClient();
   const { error } = await supabase.from("projects").delete().eq("id", id);
-  if (error) throw new Error(`Could not delete project: ${error.message}`);
+  if (error) throw new Error(`Impossible de supprimer le projet : ${error.message}`);
 }

@@ -54,7 +54,7 @@ export function BrandGeniusLogo({
     <Link
       href={href}
       className={`inline-flex items-center gap-2.5 ${className ?? ""}`}
-      aria-label="BRAND GENIUS home"
+      aria-label="Accueil BRAND GENIUS"
     >
       <BrandGeniusMark size={compact ? 24 : 28} />
       {!compact && (

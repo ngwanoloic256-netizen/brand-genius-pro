@@ -6,14 +6,14 @@ import { formatCmyk, formatRgb } from "@/lib/color";
 import type { ColorRole, ColorSwatch } from "@/lib/types";
 
 const GROUPS: Array<{ role: ColorRole; label: string; note: string }> = [
-  { role: "primary", label: "Primary", note: "Carries the brand. Use it most." },
+  { role: "primary", label: "Principale", note: "Porte la marque. La plus utilisée." },
   {
     role: "secondary",
-    label: "Secondary",
-    note: "Depth and supporting surfaces.",
+    label: "Secondaire",
+    note: "Profondeur et surfaces d’appui.",
   },
-  { role: "accent", label: "Accent", note: "Reserved for what must be noticed." },
-  { role: "neutral", label: "Neutrals", note: "Backgrounds, rules, and text." },
+  { role: "accent", label: "Accent", note: "Réservée à ce qui doit se remarquer." },
+  { role: "neutral", label: "Neutres", note: "Fonds, filets et textes." },
 ];
 
 export function PaletteSection({
@@ -63,7 +63,7 @@ export function PaletteSection({
                   type="button"
                   onClick={() => copy(swatch.hex)}
                   className="group overflow-hidden rounded-xl border border-line bg-white text-left transition-all hover:border-ink hover:shadow-lift"
-                  title={`Copy ${swatch.hex}`}
+                  title={`Copier ${swatch.hex}`}
                 >
                   <div
                     className="relative flex h-24 items-end justify-between p-3"
@@ -107,7 +107,7 @@ export function PaletteSection({
       {/* Contextual preview — the palette applied, not just listed. */}
       <div>
         <h3 className="mb-3 text-[13px] font-bold uppercase tracking-[0.1em]">
-          In context
+          En situation
         </h3>
         <div
           className="overflow-hidden rounded-xl border border-line"
@@ -120,7 +120,7 @@ export function PaletteSection({
             <span className="font-display text-[15px] font-bold">
               {brandName}
             </span>
-            <span className="text-[13px] opacity-75">Menu · About · Contact</span>
+            <span className="text-[13px] opacity-75">Menu · À propos · Contact</span>
           </div>
 
           <div className="grid gap-4 p-5 sm:grid-cols-3">
@@ -132,10 +132,9 @@ export function PaletteSection({
                 color: lightNeutral.onColor,
               }}
             >
-              <p className="text-[13px] font-semibold">Card surface</p>
+              <p className="text-[13px] font-semibold">Surface de carte</p>
               <p className="mt-1.5 text-[13px] leading-relaxed opacity-65">
-                Body copy sitting on a light neutral, the way most of the brand
-                will actually be read.
+                Du texte courant sur un neutre clair, comme la marque sera le plus souvent lue.
               </p>
             </div>
 
@@ -143,9 +142,9 @@ export function PaletteSection({
               className="rounded-lg p-4"
               style={{ background: primary.hex, color: primary.onColor }}
             >
-              <p className="text-[13px] font-semibold">Primary panel</p>
+              <p className="text-[13px] font-semibold">Panneau principal</p>
               <p className="mt-1.5 text-[13px] leading-relaxed opacity-80">
-                Full-bleed brand colour with its contrast-safe foreground.
+                La couleur de marque en pleine surface, avec un texte au contraste vérifié.
               </p>
             </div>
 
@@ -154,7 +153,7 @@ export function PaletteSection({
                 className="rounded-full px-4 py-2.5 text-center text-[13px] font-semibold"
                 style={{ background: accent.hex, color: accent.onColor }}
               >
-                Primary action
+                Action principale
               </span>
               <span
                 className="rounded-full border px-4 py-2.5 text-center text-[13px] font-semibold"
@@ -163,7 +162,7 @@ export function PaletteSection({
                   color: primary.hex,
                 }}
               >
-                Secondary action
+                Action secondaire
               </span>
             </div>
           </div>

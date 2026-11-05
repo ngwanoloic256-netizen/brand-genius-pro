@@ -297,10 +297,10 @@ export function buildLogoVariants(
   return [
     {
       id: "primary",
-      label: "Primary lockup",
+      label: "Logo principal",
       background: "light",
       usage:
-        "The default. Use it wherever the brand appears at full colour on a light surface.",
+        "La version par défaut, partout où la marque apparaît en couleur sur fond clair.",
       svg: composeLockup({
         ...base,
         layout,
@@ -311,10 +311,10 @@ export function buildLogoVariants(
     },
     {
       id: "horizontal",
-      label: "Horizontal lockup",
+      label: "Logo horizontal",
       background: "light",
       usage:
-        "For constrained heights — website headers, email signatures, document footers.",
+        "Pour les hauteurs réduites : en-têtes de site, signatures d’e-mail, pieds de document.",
       svg: composeLockup({
         ...base,
         layout: "horizontal",
@@ -328,7 +328,7 @@ export function buildLogoVariants(
       label: "Monochrome",
       background: "neutral",
       usage:
-        "One-colour reproduction: engraving, embroidery, fax, stamps, and any single-plate print.",
+        "Reproduction en une couleur : gravure, broderie, tampons et toute impression une teinte.",
       svg: composeLockup({
         ...base,
         layout,
@@ -339,10 +339,10 @@ export function buildLogoVariants(
     },
     {
       id: "inverted",
-      label: "Inverted",
+      label: "Inversé",
       background: "dark",
       usage:
-        "For dark surfaces and photography. Never place the primary lockup on a dark background instead.",
+        "Pour les fonds sombres et les photos. Ne jamais poser le logo principal sur un fond sombre.",
       svg: composeLockup({
         ...base,
         layout,
@@ -353,10 +353,10 @@ export function buildLogoVariants(
     },
     {
       id: "icon",
-      label: "Icon only",
+      label: "Icône seule",
       background: "light",
       usage:
-        "App icons, favicons, social avatars, and any placement under 40px wide.",
+        "Icônes d’application, favicons, photos de profil et tout emplacement de moins de 40 px.",
       svg: composeLockup({
         ...base,
         layout: "icon",
@@ -376,38 +376,38 @@ export function buildLogoUsage(brief: BrandBrief): LogoUsage {
     rules: [
       {
         kind: "do",
-        title: "Keep the clear space",
+        title: "Respecter la zone de protection",
         detail:
-          "Leave at least half the mark's height free on every side. Nothing — type, images, or page edges — enters that zone.",
+          "Laisser au moins la moitié de la hauteur du symbole libre de chaque côté. Ni texte, ni image, ni bord de page dans cette zone.",
       },
       {
         kind: "do",
-        title: "Respect the minimum size",
+        title: "Respecter la taille minimale",
         detail:
-          "96px on screen, 24mm in print for the full lockup. Below that, switch to the icon-only variant.",
+          "96 px à l’écran, 24 mm en impression pour le logo complet. En dessous, utiliser l’icône seule.",
       },
       {
         kind: "do",
-        title: "Pick the variant for the surface",
+        title: "Choisir la version selon le fond",
         detail:
-          "Full colour on light, inverted on dark, monochrome when the process allows one ink.",
+          "Couleur sur fond clair, inversé sur fond sombre, monochrome quand une seule encre est possible.",
       },
       {
         kind: "dont",
-        title: "Don't recolour the mark",
-        detail: `Only the approved variants are permitted. ${brief.name}'s mark is never rendered in an off-palette colour.`,
+        title: "Ne pas changer les couleurs",
+        detail: `Seules les versions validées sont autorisées. Le logo de ${brief.name} n’apparaît jamais dans une couleur hors palette.`,
       },
       {
         kind: "dont",
-        title: "Don't distort or rotate",
+        title: "Ne pas déformer ni pivoter",
         detail:
-          "Scale proportionally only. No stretching, skewing, rotating, or adding a drop shadow.",
+          "Redimensionner uniquement en proportion. Pas d’étirement, d’inclinaison, de rotation ni d’ombre portée.",
       },
       {
         kind: "dont",
-        title: "Don't place it on a busy photograph",
+        title: "Éviter les photos chargées",
         detail:
-          "If the background has detail behind the mark, add a solid panel or use a flat area of the image.",
+          "Si le fond est chargé derrière le logo, ajouter un aplat ou choisir une zone unie de l’image.",
       },
     ],
   };
@@ -446,7 +446,7 @@ export function fallbackMark(brief: BrandBrief): MarkSpec {
   const fill = readableOn(variant === 1 ? "#333333" : "#333333");
 
   return {
-    concept: `A geometric monogram built from the initials ${initials}, sized to hold its silhouette at favicon scale.`,
+    concept: `Un monogramme géométrique construit sur les initiales ${initials}, lisible même en favicon.`,
     markup: `${shells[variant]}<text x="50" y="50" text-anchor="middle" dominant-baseline="central" font-family="system-ui, sans-serif" font-size="${initials.length > 1 ? 34 : 44}" font-weight="700" letter-spacing="-1" fill="${fill}">${escapeXml(initials || "B")}</text>`,
     lockup: "horizontal",
   };

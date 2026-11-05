@@ -47,6 +47,45 @@ async function fetchFont(
   return request;
 }
 
+/**
+ * Inclut les polices de la marque directement dans un SVG.
+ *
+ * Un SVG converti en PNG par le navigateur (via `new Image()`) ne peut charger
+ * aucune police web : sans cette étape, le texte des visuels exportés tombait
+ * sur Arial. On repère chaque couple police / graisse utilisé par les balises
+ * `<text>` et on ajoute un `@font-face` en base64. Une police qui ne se charge
+ * pas est simplement ignorée : l'export continue avec la police de secours.
+ */
+export async function embedSvgFonts(svg: string, timeoutMs = 8_000): Promise<string> {
+  const pairs = new Map<string, { family: string; weight: number }>();
+  const re = /<text\b[^>]*>/g;
+  for (const tag of svg.match(re) ?? []) {
+    const familyAttr = tag.match(/font-family="([^"]+)"/)?.[1];
+    if (!familyAttr) continue;
+    const family = primaryFamily(familyAttr.replace(/&quot;/g, '"'));
+    const raw = Number(tag.match(/font-weight="(\d+)"/)?.[1] ?? 400);
+    const weight = Math.min(900, Math.max(100, Math.round(raw / 100) * 100));
+    if (family) pairs.set(key(family, weight), { family, weight });
+  }
+  if (pairs.size === 0) return svg;
+
+  const faces: string[] = [];
+  const work = Promise.all(
+    [...pairs.values()].map(async ({ family, weight }) => {
+      const base64 = await fetchFont(family, weight);
+      if (base64) {
+        faces.push(
+          `@font-face{font-family:"${family}";font-weight:${weight};src:url(data:font/ttf;base64,${base64}) format("truetype");}`,
+        );
+      }
+    }),
+  );
+  await Promise.race([work, new Promise((resolve) => setTimeout(resolve, timeoutMs))]);
+  if (faces.length === 0) return svg;
+
+  return svg.replace(/(<svg\b[^>]*>)/, `$1<style>${faces.join("")}</style>`);
+}
+
 /** A font registered on the document, and the name to pass to `setFont`. */
 export interface EmbeddedFonts {
   /** Family name for the display role, or "helvetica" if it could not load. */

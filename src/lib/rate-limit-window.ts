@@ -70,7 +70,7 @@ export class RateLimitError extends Error {
   constructor(retryAfterMs: number) {
     const seconds = Math.max(1, Math.ceil(retryAfterMs / 1000));
     super(
-      `Rate limit reached. Try again in ${seconds > 60 ? `${Math.ceil(seconds / 60)} minutes` : `${seconds} seconds`}.`,
+      `Limite atteinte. Réessayez dans ${seconds > 60 ? `${Math.ceil(seconds / 60)} minutes` : `${seconds} secondes`}.`,
     );
     this.name = "RateLimitError";
     this.retryAfterSeconds = seconds;

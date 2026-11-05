@@ -99,7 +99,7 @@ export function migrateGuide(stored: BrandGuide): BrandGuide {
       artDirection: direction,
       artDirectionRationale:
         guide.strategy?.artDirectionRationale ??
-        `Reconstructed for an earlier version of this guide. ${direction.description}`,
+        `Reconstitué depuis une version antérieure de cette charte. ${direction.description}`,
       seed,
     },
     primaryScale: guide.primaryScale ?? derived.primaryScale,

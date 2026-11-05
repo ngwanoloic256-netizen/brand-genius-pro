@@ -17,10 +17,10 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 async function assertOwner(projectId: string) {
   if (isSupabaseConfigured()) {
     const user = await getUser();
-    if (!user) throw new Error("Sign in required.");
+    if (!user) throw new Error("Connexion requise.");
   }
   const project = await getProject(projectId);
-  if (!project) throw new Error("Project not found.");
+  if (!project) throw new Error("Projet introuvable.");
   return project;
 }
 
@@ -32,9 +32,9 @@ export async function updateBriefAction(formData: FormData) {
   const industry = String(formData.get("industry") ?? "").trim();
   const keywords = String(formData.get("keywords") ?? "").trim();
 
-  if (!name || name.length > 80) throw new Error("Enter a brand name.");
-  if (industry.length > 120) throw new Error("Sector is too long.");
-  if (keywords.length > 600) throw new Error("Description is too long.");
+  if (!name || name.length > 80) throw new Error("Saisissez un nom de marque.");
+  if (industry.length > 120) throw new Error("Le secteur est trop long.");
+  if (keywords.length > 600) throw new Error("La description est trop longue.");
 
   await updateProject(projectId, { name, industry, keywords });
 

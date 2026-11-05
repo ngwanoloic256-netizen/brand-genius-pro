@@ -63,8 +63,8 @@ export function FlyerSection({ guide }: { guide: BrandGuide }) {
           />
           <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[13px]">
             <span className="text-ink-muted">
-              {active.label} · {active.format.width}×{active.format.height}mm
-              {" + 3mm bleed"}
+              {active.label} · {active.format.width}×{active.format.height} mm
+              {" + 3 mm de fond perdu"}
             </span>
             <span className="flex gap-2">
               <button
@@ -85,10 +85,10 @@ export function FlyerSection({ guide }: { guide: BrandGuide }) {
 
         <div className="rounded-xl border border-line bg-white p-5">
           <h3 className="mb-1 text-[13px] font-bold uppercase tracking-[0.1em]">
-            Print checklist
+            Contrôle avant impression
           </h3>
           <p className="mb-4 text-[13px] leading-relaxed text-ink-muted">
-            Run against this artwork, not a template.
+            Vérifié sur ce visuel précis, pas sur un modèle.
           </p>
 
           <ul className="space-y-3">
@@ -120,8 +120,7 @@ export function FlyerSection({ guide }: { guide: BrandGuide }) {
           </ul>
 
           <p className="mt-5 border-t border-line-soft pt-4 text-[12px] leading-relaxed text-ink-muted">
-            Export as SVG for the printer — vector, with the bleed already in
-            the artwork. Convert to CMYK and PDF/X-4 in your prepress step.
+            Exportez en SVG pour l’imprimeur : vectoriel, fond perdu déjà inclus. Convertissez en CMJN et PDF/X-4 lors de la préparation à l’impression.
           </p>
         </div>
       </div>

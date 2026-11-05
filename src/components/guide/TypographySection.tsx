@@ -2,10 +2,10 @@ import { ExternalLink } from "lucide-react";
 import type { BrandGuide, TypeStyle } from "@/lib/types";
 
 const ROLE_LABELS: Record<TypeStyle["role"], string> = {
-  display: "Display",
-  heading: "Headings",
-  body: "Body",
-  data: "Data",
+  display: "Affichage",
+  heading: "Titres",
+  body: "Texte courant",
+  data: "Données",
 };
 
 /**
@@ -19,7 +19,7 @@ export function TypographySection({ guide }: { guide: BrandGuide }) {
     display: brief.name,
     heading: strategy.voice.tagline,
     body: strategy.voice.positioning,
-    data: `${brief.name.toUpperCase()} · EST. ${new Date().getFullYear()} · ${strategy.sector.toUpperCase()}`,
+    data: `${brief.name.toUpperCase()} · DEPUIS ${new Date().getFullYear()} · ${strategy.sector.toUpperCase()}`,
   };
 
   return (
@@ -71,19 +71,19 @@ export function TypographySection({ guide }: { guide: BrandGuide }) {
 
             <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2 border-t border-line-soft pt-4 font-mono text-[11px] text-ink-muted sm:grid-cols-4">
               <div>
-                <dt className="text-ink-muted">Size</dt>
+                <dt className="text-ink-muted">Taille</dt>
                 <dd>{style.sizePx}px</dd>
               </div>
               <div>
-                <dt className="text-ink-muted">Line height</dt>
+                <dt className="text-ink-muted">Interligne</dt>
                 <dd>{style.lineHeight}</dd>
               </div>
               <div>
-                <dt className="text-ink-muted">Tracking</dt>
+                <dt className="text-ink-muted">Approche</dt>
                 <dd>{style.letterSpacingEm}em</dd>
               </div>
               <div>
-                <dt className="text-ink-muted">Weights</dt>
+                <dt className="text-ink-muted">Graisses</dt>
                 <dd>{style.weights.join(", ")}</dd>
               </div>
             </dl>
@@ -97,7 +97,7 @@ export function TypographySection({ guide }: { guide: BrandGuide }) {
 
       {/* Full hierarchy in one block, set in the brand's own voice */}
       <div className="rounded-xl border border-line bg-white p-6 sm:p-8">
-        <p className="text-eyebrow mb-5">Hierarchy</p>
+        <p className="text-eyebrow mb-5">Hiérarchie</p>
         <Hierarchy guide={guide} />
       </div>
     </div>

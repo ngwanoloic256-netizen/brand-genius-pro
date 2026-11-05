@@ -18,7 +18,7 @@ import {
  *      the per-route `getUser()` checks.
  */
 
-const PROTECTED_PREFIXES = ["/dashboard", "/projects", "/settings"];
+const PROTECTED_PREFIXES = ["/dashboard", "/projects", "/settings", "/abonnement"];
 const AUTH_ROUTES = ["/login", "/signup"];
 
 function isProtected(pathname: string): boolean {

@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 
 export const GUIDE_SECTIONS = [
-  { id: "direction", label: "Art direction" },
-  { id: "logo", label: "Logo & variations" },
-  { id: "palette", label: "Colour palette" },
-  { id: "typography", label: "Typography" },
-  { id: "usage", label: "Logo usage" },
+  { id: "direction", label: "Direction artistique" },
+  { id: "logo", label: "Logo et versions" },
+  { id: "palette", label: "Palette de couleurs" },
+  { id: "typography", label: "Typographie" },
+  { id: "usage", label: "Utilisation du logo" },
   { id: "mockups", label: "Mockups" },
+  { id: "social", label: "Réseaux sociaux" },
   { id: "flyers", label: "Flyers" },
-  { id: "voice", label: "Tone & personality" },
+  { id: "voice", label: "Ton et personnalité" },
 ] as const;
 
 /** Sticky table of contents with scroll spy. */
@@ -37,10 +38,10 @@ export function GuideNav() {
 
   return (
     <nav
-      aria-label="Brand guide sections"
+      aria-label="Sections de la charte"
       className="sticky top-8 hidden w-52 shrink-0 lg:block"
     >
-      <p className="text-eyebrow mb-3">Contents</p>
+      <p className="text-eyebrow mb-3">Sommaire</p>
       <ul className="space-y-0.5">
         {GUIDE_SECTIONS.map(({ id, label }) => (
           <li key={id}>

@@ -32,10 +32,10 @@ export interface FlyerFormat {
 }
 
 export const FLYER_FORMATS: FlyerFormat[] = [
-  { id: "a6", label: "A6 — hand-out", width: 105, height: 148, margin: 8 },
+  { id: "a6", label: "A6 — à distribuer", width: 105, height: 148, margin: 8 },
   { id: "a5", label: "A5 — standard", width: 148, height: 210, margin: 10 },
-  { id: "dl", label: "DL — display stand", width: 99, height: 210, margin: 8 },
-  { id: "a4", label: "A4 — poster / dossier", width: 210, height: 297, margin: 12 },
+  { id: "dl", label: "DL — présentoir", width: 99, height: 210, margin: 8 },
+  { id: "a4", label: "A4 — affiche / dossier", width: 210, height: 297, margin: 12 },
 ];
 
 /** Print bleed on every edge. Non-negotiable for commercial printing. */
@@ -74,36 +74,36 @@ interface LayoutSpec {
  * diagonal colour block undoes editorial luxury.
  */
 const LAYOUTS: LayoutSpec[] = [
-  { id: "bandeau-haut", label: "Top band", path: "F", forbiddenFor: [] },
-  { id: "split-vertical", label: "Vertical split", path: "Z", forbiddenFor: [] },
+  { id: "bandeau-haut", label: "Bandeau haut", path: "F", forbiddenFor: [] },
+  { id: "split-vertical", label: "Partage vertical", path: "Z", forbiddenFor: [] },
   {
     id: "photo-pleine-page",
-    label: "Full-bleed image",
+    label: "Image pleine page",
     path: "Z",
     forbiddenFor: ["minimal-suisse"],
   },
   {
     id: "bloc-diagonal",
-    label: "Diagonal block",
+    label: "Bloc diagonal",
     path: "Z",
     forbiddenFor: ["luxe-editorial", "minimal-suisse", "premium-sombre"],
   },
-  { id: "grille-modulaire", label: "Modular grid", path: "F", forbiddenFor: [] },
+  { id: "grille-modulaire", label: "Grille modulaire", path: "F", forbiddenFor: [] },
   {
     id: "centre-editorial",
-    label: "Centred editorial",
+    label: "Éditorial centré",
     path: "Z",
     forbiddenFor: ["brutaliste", "pop-ludique"],
   },
   {
     id: "asymetrique-drapeau",
-    label: "Flag asymmetric",
+    label: "Drapeau asymétrique",
     path: "F",
     forbiddenFor: [],
   },
   {
     id: "bordure-badge",
-    label: "Framed badge",
+    label: "Badge encadré",
     path: "Z",
     forbiddenFor: ["minimal-suisse", "tech-futuriste"],
   },
@@ -672,10 +672,10 @@ export function defaultContent(guide: BrandGuide): FlyerContent {
     headline: headlineFrom(guide),
     benefit: voice.positioning,
     bullets: voice.toneDo.slice(0, 3).map((rule) => rule.replace(/\.$/, "")),
-    cta: "Book a free consultation",
+    cta: "Contactez-nous dès aujourd’hui",
     contact: {
       site: `${slug}.com`,
-      phone: "+00 000 000 000",
+      phone: "+237 6 00 00 00 00",
     },
   };
 }
@@ -730,39 +730,39 @@ export function checkFlyer(
 
   return [
     {
-      label: "Hierarchy ratio ≥ 3",
+      label: "Rapport de hiérarchie ≥ 3",
       passes: flyer.hierarchyRatio >= 3,
-      detail: `Headline is ${flyer.hierarchyRatio.toFixed(1)}× the body.`,
+      detail: `Le titre fait ${flyer.hierarchyRatio.toFixed(1)}× le texte.`,
     },
     {
-      label: "White space ≥ 30%",
+      label: "Espace blanc ≥ 30 %",
       passes: flyer.whitespaceRatio >= 0.3,
       detail: `${Math.round(flyer.whitespaceRatio * 100)}% of the page is left empty.`,
     },
     {
-      label: "Body contrast ≥ 4.5:1",
+      label: "Contraste du texte ≥ 4,5:1",
       passes: bodyContrast >= 4.5,
       detail: `${bodyContrast.toFixed(2)}:1 against the page.`,
     },
     {
-      label: "CTA contrast ≥ 4.5:1",
+      label: "Contraste du bouton ≥ 4,5:1",
       passes: ctaContrast >= 4.5,
       detail: `${ctaContrast.toFixed(2)}:1 on the accent.`,
     },
     {
-      label: "Bleed 3mm on every edge",
+      label: "Fond perdu de 3 mm partout",
       passes: true,
-      detail: "Artwork extends 3mm past the trim on all four sides.",
+      detail: "Le visuel dépasse de 3 mm la coupe sur les quatre côtés.",
     },
     {
-      label: "Safe zone respected",
+      label: "Zone de sécurité respectée",
       passes: flyer.format.margin >= SAFE_ZONE,
-      detail: `Composition margin is ${flyer.format.margin}mm, inside the ${SAFE_ZONE}mm safe zone.`,
+      detail: `Marge de composition de ${flyer.format.margin} mm, dans la zone de sécurité de ${SAFE_ZONE} mm.`,
     },
     {
-      label: "One message, one CTA",
+      label: "Un message, un appel à l’action",
       passes: true,
-      detail: "A single headline and a single call to action per flyer.",
+      detail: "Un seul titre et un seul appel à l’action par flyer.",
     },
   ];
 }

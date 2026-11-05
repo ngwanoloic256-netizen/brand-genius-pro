@@ -13,28 +13,28 @@ import type { BrandBrief, BrandGuide } from "./types";
 const BRIEFS: BrandBrief[] = [
   {
     name: "Lumen Roasters",
-    industry: "Specialty coffee roastery",
+    industry: "Torréfaction de café de spécialité",
     keywords:
-      "single-origin, transparent sourcing, slow craft, a neighbourhood ritual",
-    audience: "City-centre regulars who care where the beans came from",
+      "origine unique, approvisionnement transparent, artisanat patient, un rituel de quartier",
+    audience: "les habitués du centre-ville qui veulent savoir d’où vient leur café",
   },
   {
     name: "North Signal",
-    industry: "B2B analytics SaaS",
-    keywords: "clarity, signal over noise, engineering rigour, calm dashboards",
-    audience: "Data teams at mid-market SaaS companies",
+    industry: "SaaS d’analyse de données B2B",
+    keywords: "clarté, l’essentiel avant le bruit, rigueur d’ingénieur, tableaux de bord sereins",
+    audience: "les équipes data des PME du logiciel",
   },
   {
     name: "Verdant Clinic",
-    industry: "Dental and orthodontic clinic",
-    keywords: "calm, precise, unhurried care, modern without being clinical",
-    audience: "Families booking their own appointments",
+    industry: "Clinique dentaire et orthodontique",
+    keywords: "calme, précision, soins sans précipitation, moderne sans être froid",
+    audience: "les familles qui prennent rendez-vous elles-mêmes",
   },
   {
     name: "Atelier Frame",
-    industry: "Independent design studio",
-    keywords: "editorial, opinionated, craft-led, brand systems for founders",
-    audience: "Seed-stage founders who need a real identity",
+    industry: "Studio de design indépendant",
+    keywords: "éditorial, engagé, artisanal, identités de marque pour fondateurs",
+    audience: "les fondateurs de start-up qui veulent une vraie identité",
   },
 ];
 

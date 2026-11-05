@@ -11,13 +11,15 @@ import {
   X,
   Menu,
   LogOut,
+  CreditCard,
 } from "lucide-react";
 import { BrandGeniusLogo } from "../BrandGeniusLogo";
 
 const NAV = [
-  { href: "/dashboard", label: "Projects", icon: LayoutGrid },
-  { href: "/projects/new", label: "New brand", icon: Plus },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Projets", icon: LayoutGrid },
+  { href: "/projects/new", label: "Nouvelle marque", icon: Plus },
+  { href: "/abonnement", label: "Abonnement", icon: CreditCard },
+  { href: "/settings", label: "Paramètres", icon: Settings },
 ];
 
 interface SidebarProps {
@@ -68,11 +70,10 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
       {demoMode && (
         <div className="rounded-xl border border-accent-soft/25 bg-accent-soft/10 p-3">
           <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-accent-soft">
-            <Sparkles size={12} /> Local mode
+            <Sparkles size={12} /> Mode local
           </p>
           <p className="mt-1.5 text-xs leading-relaxed text-white/55">
-            Running without a database. Projects live in memory and reset when
-            the server restarts.
+            Aucune base de données branchée. Les projets restent en mémoire et disparaissent au redémarrage du serveur.
           </p>
         </div>
       )}
@@ -88,7 +89,7 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
           <form action="/auth/signout" method="post">
             <button
               type="submit"
-              aria-label="Sign out"
+              aria-label="Se déconnecter"
               className="grid size-7 place-items-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-white"
             >
               <LogOut size={14} />
@@ -101,7 +102,7 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
           onClick={close}
           className="block rounded-xl bg-white/5 p-3 text-xs text-white/65 transition-colors hover:bg-white/10 hover:text-white"
         >
-          Sign in to save your work →
+          Connectez-vous pour enregistrer votre travail →
         </Link>
       )}
     </div>
@@ -114,7 +115,7 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
         <BrandGeniusLogo compact={false} />
         <button
           onClick={() => setOpen(true)}
-          aria-label="Open navigation"
+          aria-label="Ouvrir le menu"
           className="grid size-9 place-items-center rounded-lg border border-line bg-white"
         >
           <Menu size={18} />
@@ -125,7 +126,7 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
           <button
-            aria-label="Close navigation"
+            aria-label="Fermer le menu"
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-ink/45 animate-fade"
           />
@@ -134,7 +135,7 @@ export function Sidebar({ userEmail, demoMode }: SidebarProps) {
               <BrandGeniusLogo />
               <button
                 onClick={() => setOpen(false)}
-                aria-label="Close navigation"
+                aria-label="Fermer le menu"
                 className="grid size-8 place-items-center rounded-lg text-white/60 hover:bg-white/10"
               >
                 <X size={18} />

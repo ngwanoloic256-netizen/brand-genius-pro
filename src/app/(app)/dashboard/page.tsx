@@ -22,12 +22,12 @@ export default async function DashboardPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Workspace"
-        title="Brand projects"
+        eyebrow="Espace de travail"
+        title="Mes marques"
         description={
           projects.length > 0
-            ? `${counts.total} ${counts.total === 1 ? "brand" : "brands"} · ${counts.complete} complete · ${counts.drafts} in draft`
-            : "Every identity you generate lives here."
+            ? `${counts.total} ${counts.total === 1 ? "marque" : "marques"} · ${counts.complete} ${counts.complete === 1 ? "terminée" : "terminées"} · ${counts.drafts} en brouillon`
+            : "Toutes les identités que vous créez apparaissent ici."
         }
         actions={<NewProjectButton />}
       />
@@ -38,13 +38,12 @@ export default async function DashboardPage() {
             <span className="mb-4 grid size-12 place-items-center rounded-full bg-bone-deep text-ink-muted">
               <FolderOpen size={22} />
             </span>
-            <h2 className="font-display text-xl font-bold">No brands yet</h2>
+            <h2 className="font-display text-xl font-bold">Aucune marque pour l’instant</h2>
             <p className="mt-2 max-w-sm text-sm leading-relaxed text-ink-muted">
-              Start from a name and a sentence about what the brand stands for.
-              A full guide takes about a minute.
+              Partez d’un nom et d’une phrase sur ce que défend la marque. Une charte complète prend environ une minute.
             </p>
             <div className="mt-6">
-              <NewProjectButton label="Create your first brand" />
+              <NewProjectButton label="Créer ma première marque" />
             </div>
           </div>
         ) : (

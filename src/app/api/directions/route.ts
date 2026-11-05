@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
   }
 
   const parsed = DirectionsSchema.safeParse(body);
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   const user = isSupabaseConfigured() ? await getUser() : null;
   if (isSupabaseConfigured() && !user) {
-    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+    return NextResponse.json({ error: "Connectez-vous pour continuer." }, { status: 401 });
   }
 
   const identity = identityFrom(request, user?.id);
@@ -65,10 +65,10 @@ export async function POST(request: Request) {
   } catch (err) {
     const message =
       err instanceof z.ZodError
-        ? "The model returned an unexpected shape. Try again."
+        ? "L’IA a renvoyé une réponse inattendue. Réessayez."
         : err instanceof Error
           ? err.message
-          : "Generation failed.";
+          : "La création a échoué.";
 
     await recordGeneration("directions", "failed", { error: message });
     console.error("Directions generation failed:", err);

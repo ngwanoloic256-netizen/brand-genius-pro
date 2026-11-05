@@ -82,7 +82,7 @@ function repairBodyContrast(palette: ColorSwatch[]): {
     palette: palette.map((s) =>
       s === ink ? { ...s, hex, onColor: paper.hex } : s,
     ),
-    repaired: `Darkened the ink neutral to reach ${ratio.toFixed(2)}:1 against paper.`,
+    repaired: `Couleur du texte assombrie pour atteindre ${ratio.toFixed(2)}:1 sur le fond.`,
   };
 }
 
@@ -117,7 +117,7 @@ function repairAccentContrast(palette: ColorSwatch[]): {
 
   return {
     palette: palette.map((s) => (s === accent ? { ...s, hex } : s)),
-    repaired: `Shifted the accent's lightness to reach ${ratio.toFixed(2)}:1 against paper.`,
+    repaired: `Luminosité de l’accent ajustée pour atteindre ${ratio.toFixed(2)}:1 sur le fond.`,
   };
 }
 
@@ -133,7 +133,7 @@ function checkTypeFamilies(typography: TypeStyle[]): QualityIssue | null {
   return {
     id: "type-family-count",
     severity: "blocking",
-    message: `The system uses ${families.size} type families (${[...families].join(", ")}). The limit is three, including a mono.`,
+    message: `Le système utilise ${families.size} familles de polices (${[...families].join(", ")}). La limite est de trois, police à chasse fixe comprise.`,
   };
 }
 
@@ -146,7 +146,7 @@ function checkPaletteRoles(palette: ColorSwatch[]): QualityIssue | null {
   return {
     id: "palette-roles",
     severity: "blocking",
-    message: `The palette is missing ${missing.join(", ")}.`,
+    message: `Il manque à la palette : ${missing.join(", ")}.`,
   };
 }
 
@@ -172,7 +172,7 @@ function checkLogoLegibility(guide: BrandGuide): QualityIssue | null {
     return {
       id: "logo-legibility",
       severity: "warning",
-      message: `The mark has ${shapeCount} shapes. Above roughly eight it stops reading at 16px — the icon-only variant is the one to use small.`,
+      message: `Le symbole compte ${shapeCount} formes. Au-delà de huit environ, il devient illisible à 16 px : utilisez l’icône seule en petit.`,
     };
   }
 
@@ -180,7 +180,7 @@ function checkLogoLegibility(guide: BrandGuide): QualityIssue | null {
     return {
       id: "logo-legibility",
       severity: "warning",
-      message: `The mark uses strokes as thin as ${Math.min(...hairline)} units on a 100-unit box, which disappears below about 24px.`,
+      message: `Le symbole a des traits de ${Math.min(...hairline)} unités sur 100, qui disparaissent sous 24 px environ.`,
     };
   }
 
@@ -193,7 +193,7 @@ function checkMockupVariety(guide: BrandGuide): QualityIssue | null {
     return {
       id: "mockup-variety",
       severity: "blocking",
-      message: "The same mockup surface appears twice in one board.",
+      message: "Le même support de mockup apparaît deux fois.",
     };
   }
 
@@ -203,7 +203,7 @@ function checkMockupVariety(guide: BrandGuide): QualityIssue | null {
       return {
         id: "mockup-variety",
         severity: "blocking",
-        message: `Two consecutive mockups share the ${families[i]} composition.`,
+        message: `Deux mockups qui se suivent ont la même composition (${families[i]}).`,
       };
     }
   }
@@ -235,7 +235,7 @@ export function enforceQuality(guide: BrandGuide): QualityResult {
     issues.push({
       id: "body-contrast",
       severity: "warning",
-      message: "Body text did not clear WCAG AA against the page background.",
+      message: "Le texte courant n’atteint pas le contraste WCAG AA sur le fond.",
       repaired: body.repaired,
     });
   }
@@ -246,7 +246,7 @@ export function enforceQuality(guide: BrandGuide): QualityResult {
     issues.push({
       id: "accent-contrast",
       severity: "warning",
-      message: "The accent did not separate from the page background.",
+      message: "L’accent ne se détache pas assez du fond.",
       repaired: accent.repaired,
     });
   }

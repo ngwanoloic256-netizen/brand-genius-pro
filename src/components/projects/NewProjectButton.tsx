@@ -9,27 +9,27 @@ const OPTIONS = [
   {
     mode: "generate_logo",
     icon: PenLine,
-    title: "Create a logo",
+    title: "Créer un logo",
     detail:
-      "Start from the brand name and what it stands for. We draw the mark, then build the whole system around it.",
+      "Partez du nom de la marque et de ce qu’elle défend. Nous dessinons le logo, puis tout le système autour.",
   },
   {
     mode: "import_logo",
     icon: Upload,
-    title: "Import an existing logo",
+    title: "Importer un logo existant",
     detail:
-      "Upload the logo you already use. We derive the palette, typography, and usage rules from it.",
+      "Envoyez le logo que vous utilisez déjà. Nous en tirons la palette, les polices et les règles d’usage.",
   },
   {
     mode: "guide_only",
     icon: Palette,
-    title: "Brand guide from scratch",
+    title: "Charte sans logo",
     detail:
-      "No logo yet, and none needed. Get the colour, type, and voice system from the brief alone.",
+      "Pas encore de logo ? Pas de souci. Obtenez couleurs, polices et ton de marque à partir du brief.",
   },
 ] as const;
 
-export function NewProjectButton({ label = "New project" }: { label?: string }) {
+export function NewProjectButton({ label = "Nouveau projet" }: { label?: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -51,10 +51,10 @@ export function NewProjectButton({ label = "New project" }: { label?: string }) 
           className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6"
           role="dialog"
           aria-modal="true"
-          aria-label="Choose how to start"
+          aria-label="Choisir comment commencer"
         >
           <button
-            aria-label="Close"
+            aria-label="Fermer"
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-ink/50 animate-fade backdrop-blur-[2px]"
           />
@@ -62,14 +62,14 @@ export function NewProjectButton({ label = "New project" }: { label?: string }) 
           <div className="relative w-full max-w-2xl rounded-t-2xl border border-line bg-white p-6 shadow-pop animate-rise sm:rounded-2xl sm:p-8">
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <p className="text-eyebrow mb-2">Start a brand</p>
+                <p className="text-eyebrow mb-2">Nouvelle marque</p>
                 <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-                  How do you want to begin?
+                  Comment voulez-vous commencer ?
                 </h2>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                aria-label="Close"
+                aria-label="Fermer"
                 className="grid size-8 shrink-0 place-items-center rounded-lg text-ink-muted transition-colors hover:bg-bone-deep hover:text-ink"
               >
                 <X size={18} />

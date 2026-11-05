@@ -44,24 +44,25 @@ const serif = Newsreader({
 
 export const metadata: Metadata = {
   title: {
-    default: "BRAND GENIUS — Complete brand identities in minutes",
+    default: "BRAND GENIUS — Votre identité de marque complète en quelques minutes",
     template: "%s · BRAND GENIUS",
   },
   description:
-    "Generate a logo, a professional brand guide, and varied realistic mockups from a single brief — or from a logo you already own.",
+    "Créez un logo, une charte graphique professionnelle, des mockups réalistes et un kit réseaux sociaux à partir d’un seul brief, ou de votre logo existant.",
   metadataBase: siteUrlObject(),
   openGraph: {
     title: "BRAND GENIUS",
     description:
-      "A complete brand identity — logo, guide, and mockups — generated from one brief.",
+      "Une identité de marque complète (logo, charte, mockups, réseaux sociaux) créée à partir d’un seul brief.",
     type: "website",
+    locale: "fr_FR",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`${display.variable} ${sans.variable} ${mono.variable} ${serif.variable} h-full`}
       style={
         {

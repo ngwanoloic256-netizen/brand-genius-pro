@@ -7,6 +7,7 @@ import { inlineExternalImages } from "./inline-images";
 import { embedBrandFonts, type EmbeddedFonts } from "./fonts";
 import { generateFlyers } from "../ai/flyer";
 import type { BrandGuide, Mockup } from "../types";
+import { fr, HARMONY_FR, NEUTRALS_FR, SATURATION_FR } from "../labels-fr";
 
 /**
  * Brand guide PDF export.
@@ -54,7 +55,10 @@ function body(ctx: Ctx, size: number, style: "normal" | "bold" = "normal") {
  * Separated from saving so the bundle export can put the same bytes into a ZIP
  * without generating the document twice.
  */
-export async function buildBrandGuidePdf(guide: BrandGuide): Promise<Blob> {
+export async function buildBrandGuidePdf(
+  guide: BrandGuide,
+  options: { watermark?: boolean } = {},
+): Promise<Blob> {
   const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
   const fonts = await embedBrandFonts(doc, guide);
   const ctx: Ctx = { doc, guide, page: 0, fonts, toc: [] };
@@ -78,16 +82,20 @@ export async function buildBrandGuidePdf(guide: BrandGuide): Promise<Blob> {
   await flyerPages(ctx);
 
   writeContents(ctx, contentsPageIndex);
+  if (options.watermark) watermarkPages(doc);
 
   return doc.output("blob");
 }
 
-export async function exportBrandGuidePdf(guide: BrandGuide): Promise<void> {
-  const blob = await buildBrandGuidePdf(guide);
+export async function exportBrandGuidePdf(
+  guide: BrandGuide,
+  options: { watermark?: boolean } = {},
+): Promise<void> {
+  const blob = await buildBrandGuidePdf(guide, options);
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${slug(guide.brief.name)}-brand-guide.pdf`;
+  link.download = `${slug(guide.brief.name)}-charte-graphique.pdf`;
   document.body.append(link);
   link.click();
   link.remove();
@@ -95,6 +103,24 @@ export async function exportBrandGuidePdf(guide: BrandGuide): Promise<void> {
 }
 
 export { slug as brandSlug };
+
+/** Filigrane de l'offre gratuite, en diagonale et discret, sur chaque page. */
+function watermarkPages(doc: jsPDF) {
+  const total = doc.getNumberOfPages();
+  for (let i = 1; i <= total; i++) {
+    doc.setPage(i);
+    doc.saveGraphicsState();
+    doc.setGState(new (doc as unknown as { GState: new (o: object) => unknown }).GState({ opacity: 0.12 }) as never);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(34);
+    doc.setTextColor(120);
+    doc.text("BRAND GENIUS · VERSION GRATUITE", PAGE.width / 2, PAGE.height / 2, {
+      align: "center",
+      angle: 35,
+    });
+    doc.restoreGraphicsState();
+  }
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Pages                                                                     */
@@ -120,19 +146,19 @@ async function coverPage(ctx: Ctx) {
 
   body(ctx, 14);
   doc.setTextColor(onColor[0], onColor[1], onColor[2]);
-  doc.text("Brand Guidelines", MARGIN, 174);
+  doc.text("Charte graphique", MARGIN, 174);
 
   body(ctx, 9);
   doc.setTextColor(onColor[0], onColor[1], onColor[2]);
   doc.text(
     [
       guide.brief.industry,
-      new Date(guide.generatedAt).toLocaleDateString("en-GB", {
+      new Date(guide.generatedAt).toLocaleDateString("fr-FR", {
         day: "numeric",
         month: "long",
         year: "numeric",
       }),
-      "Generated with BRAND GENIUS",
+      "Créée avec BRAND GENIUS",
     ].join("   ·   "),
     MARGIN,
     PAGE.height - MARGIN,
@@ -141,7 +167,7 @@ async function coverPage(ctx: Ctx) {
 
 /** Adds the contents page now and returns its index, to be filled in later. */
 function reserveContentsPage(ctx: Ctx): number {
-  newPage(ctx, "Contents", { inToc: false });
+  newPage(ctx, "Sommaire", { inToc: false });
   footer(ctx);
   return ctx.doc.getNumberOfPages();
 }
@@ -186,7 +212,7 @@ function writeContents(ctx: Ctx, pageIndex: number) {
 async function directionPage(ctx: Ctx) {
   const { doc, guide } = ctx;
   const ad = guide.strategy.artDirection;
-  newPage(ctx, "Art direction");
+  newPage(ctx, "Direction artistique");
 
   display(ctx, 24);
   doc.setTextColor(20);
@@ -203,20 +229,20 @@ async function directionPage(ctx: Ctx) {
   let y = 74 + rationale.length * 5.2;
 
   const rows: Array<[string, string]> = [
-    ["Corner radius", ad.radius >= 999 ? "Full (pill)" : `${ad.radius}px`],
-    ["Stroke", `${ad.stroke}px`],
-    ["Type scale", String(ad.type.scale)],
-    ["Colour harmony", ad.color.harmony.replace(/-/g, " ")],
-    ["Saturation", ad.color.saturation],
-    ["Neutrals", `${ad.color.neutrals} tinted`],
-    ["White space", `${Math.round(ad.whitespaceRatio * 100)}%`],
-    ["Grid", `${ad.grid.columns} columns · ${ad.grid.gutter}px gutter`],
-    ["Shapes", ad.shapes],
-    ["Iconography", ad.iconography],
-    ["Imagery", ad.imagery],
+    ["Arrondi des angles", ad.radius >= 999 ? "Complet (pilule)" : `${ad.radius} px`],
+    ["Épaisseur de trait", `${ad.stroke} px`],
+    ["Échelle typographique", String(ad.type.scale)],
+    ["Harmonie des couleurs", fr(HARMONY_FR, ad.color.harmony)],
+    ["Saturation", fr(SATURATION_FR, ad.color.saturation)],
+    ["Neutres", fr(NEUTRALS_FR, ad.color.neutrals)],
+    ["Espace blanc", `${Math.round(ad.whitespaceRatio * 100)} %`],
+    ["Grille", `${ad.grid.columns} colonnes · gouttière de ${ad.grid.gutter} px`],
+    ["Formes", ad.shapes],
+    ["Icônes", ad.iconography],
+    ["Images", ad.imagery],
     ["Texture", ad.texture],
-    ["Shadow", ad.shadow],
-    ["Layout signature", ad.layoutSignature],
+    ["Ombre", ad.shadow],
+    ["Signature de mise en page", ad.layoutSignature],
   ];
 
   for (const [label, value] of rows) {
@@ -239,7 +265,7 @@ async function directionPage(ctx: Ctx) {
     y += 4;
     body(ctx, 8, "bold");
     doc.setTextColor(140);
-    doc.text("PRIMARY SCALE", MARGIN, y);
+    doc.text("NUANCES DE LA PRINCIPALE", MARGIN, y);
     y += 4;
 
     const steps = Object.keys(guide.primaryScale)
@@ -268,7 +294,7 @@ async function directionPage(ctx: Ctx) {
 function voicePage(ctx: Ctx) {
   const { doc, guide } = ctx;
   const { voice } = guide.strategy;
-  newPage(ctx, "Tone of voice");
+  newPage(ctx, "Ton de la marque");
 
   display(ctx, 18);
   doc.setTextColor(20);
@@ -284,7 +310,7 @@ function voicePage(ctx: Ctx) {
 
   body(ctx, 8, "bold");
   doc.setTextColor(140);
-  doc.text("PERSONALITY", MARGIN, y);
+  doc.text("PERSONNALITÉ", MARGIN, y);
   y += 6;
   body(ctx, 10);
   doc.setTextColor(30);
@@ -294,8 +320,8 @@ function voicePage(ctx: Ctx) {
   y += 14;
 
   for (const [label, items, tint] of [
-    ["DO", voice.toneDo, [9, 123, 78]],
-    ["DON'T", voice.toneDont, [200, 42, 54]],
+    ["À FAIRE", voice.toneDo, [9, 123, 78]],
+    ["À ÉVITER", voice.toneDont, [200, 42, 54]],
   ] as const) {
     if (y > PAGE.height - 40) break;
     body(ctx, 9, "bold");
@@ -353,7 +379,7 @@ async function flyerPages(ctx: Ctx) {
     body(ctx, 7);
     doc.setTextColor(140);
     doc.text(
-      `${flyer.format.width}×${flyer.format.height}mm  ·  3mm bleed  ·  hierarchy ${flyer.hierarchyRatio.toFixed(1)}:1`,
+      `${flyer.format.width}×${flyer.format.height} mm  ·  fond perdu 3 mm  ·  hiérarchie ${flyer.hierarchyRatio.toFixed(1)}:1`,
       x,
       y + maxH + 9.5,
     );
@@ -364,7 +390,7 @@ async function flyerPages(ctx: Ctx) {
 
 async function logoPage(ctx: Ctx) {
   const { doc, guide } = ctx;
-  newPage(ctx, "Logo & variations");
+  newPage(ctx, "Logo et versions");
 
   const cell = { w: (CONTENT_WIDTH - 8) / 2, h: 46 };
   let x = MARGIN;
@@ -406,14 +432,14 @@ async function logoPage(ctx: Ctx) {
 
 function palettePage(ctx: Ctx) {
   const { doc, guide } = ctx;
-  newPage(ctx, "Colour palette");
+  newPage(ctx, "Palette de couleurs");
 
   let y = 56;
   const groups: Array<[string, string]> = [
-    ["primary", "Primary"],
-    ["secondary", "Secondary"],
+    ["primary", "Principale"],
+    ["secondary", "Secondaire"],
     ["accent", "Accent"],
-    ["neutral", "Neutrals"],
+    ["neutral", "Neutres"],
   ];
 
   for (const [role, label] of groups) {
@@ -463,7 +489,7 @@ function palettePage(ctx: Ctx) {
 
 function typographyPage(ctx: Ctx) {
   const { doc, guide } = ctx;
-  newPage(ctx, "Typography");
+  newPage(ctx, "Typographie");
 
   // Each specimen is set in whichever brand face was embedded for its role, so
   // the page shows the typeface rather than merely naming it.
@@ -499,7 +525,7 @@ function typographyPage(ctx: Ctx) {
     doc.setFontSize(7.5);
     doc.setTextColor(120);
     doc.text(
-      `${style.sizePx}px  ·  line-height ${style.lineHeight}  ·  tracking ${style.letterSpacingEm}em  ·  weights ${style.weights.join("/")}`,
+      `${style.sizePx} px  ·  interligne ${style.lineHeight}  ·  approche ${style.letterSpacingEm} em  ·  graisses ${style.weights.join("/")}`,
       MARGIN,
       y + 27,
     );
@@ -540,12 +566,12 @@ function typographyPage(ctx: Ctx) {
 
 function usagePage(ctx: Ctx) {
   const { doc, guide } = ctx;
-  newPage(ctx, "Logo usage");
+  newPage(ctx, "Utilisation du logo");
 
   body(ctx, 9.5);
   doc.setTextColor(60);
   doc.text(
-    `Clear space: ${guide.logoUsage.clearSpaceRatio}× the mark's height on every side.    Minimum size: ${guide.logoUsage.minWidthPx}px on screen, ${guide.logoUsage.minWidthMm}mm in print.`,
+    `Zone de protection : ${guide.logoUsage.clearSpaceRatio}× la hauteur du symbole de chaque côté.    Taille minimale : ${guide.logoUsage.minWidthPx} px à l’écran, ${guide.logoUsage.minWidthMm} mm en impression.`,
     MARGIN,
     56,
     { maxWidth: CONTENT_WIDTH, lineHeightFactor: 1.5 },
@@ -559,7 +585,7 @@ function usagePage(ctx: Ctx) {
     body(ctx, 9, "bold");
     // The depths that clear AA, matching the app's own semantic pair.
     doc.setTextColor(kind === "do" ? 9 : 200, kind === "do" ? 123 : 42, kind === "do" ? 78 : 54);
-    doc.text(kind === "do" ? "DO" : "DON'T", MARGIN, y);
+    doc.text(kind === "do" ? "À FAIRE" : "À ÉVITER", MARGIN, y);
     y += 7;
 
     for (const rule of rules) {
@@ -588,7 +614,7 @@ async function mockupPages(ctx: Ctx) {
 
   for (let i = 0; i < guide.mockups.length; i += perPage) {
     const batch = guide.mockups.slice(i, i + perPage);
-    newPage(ctx, i === 0 ? "Mockups" : "Mockups (continued)", {
+    newPage(ctx, i === 0 ? "Mockups" : "Mockups (suite)", {
       inToc: i === 0,
     });
     await drawMockupGrid(ctx, batch);
@@ -646,7 +672,7 @@ function footer(ctx: Ctx) {
   body(ctx, 7);
   doc.setTextColor(160);
   doc.text(
-    `${guide.brief.name}  ·  Brand Guidelines`,
+    `${guide.brief.name}  ·  Charte graphique`,
     MARGIN,
     PAGE.height - 12,
   );
@@ -679,6 +705,10 @@ async function drawSvg(
   try {
     const element = host.querySelector("svg");
     if (!element) return;
+    // Les calques de réalisme utilisent des modes de fusion que svg2pdf ignore :
+    // il les dessinerait comme une photo opaque par-dessus le logo.
+    element.querySelectorAll("[data-realism]").forEach((node) => node.remove());
+    element.querySelectorAll("[filter]").forEach((node) => node.removeAttribute("filter"));
 
     const { width, height } = intrinsicSize(element);
     const scale = Math.min(maxWidth / width, maxHeight / height);

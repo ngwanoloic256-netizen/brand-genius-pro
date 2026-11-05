@@ -17,11 +17,11 @@ export function UsageSection({ guide }: { guide: BrandGuide }) {
         {/* Clear space diagram */}
         <div className="rounded-xl border border-line bg-white p-6">
           <h3 className="text-[13px] font-bold uppercase tracking-[0.1em]">
-            Clear space
+            Zone de protection
           </h3>
           <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">
-            Leave at least {logoUsage.clearSpaceRatio}× the mark&apos;s height
-            free on every side. Nothing enters the shaded zone.
+            Laissez au moins {logoUsage.clearSpaceRatio}× la hauteur du symbole
+            libre de chaque côté. Rien ne doit entrer dans la zone hachurée.
           </p>
 
           <div className="mt-5 grid place-items-center rounded-lg bg-bone-deep p-6">
@@ -50,11 +50,11 @@ export function UsageSection({ guide }: { guide: BrandGuide }) {
         {/* Minimum size */}
         <div className="rounded-xl border border-line bg-white p-6">
           <h3 className="text-[13px] font-bold uppercase tracking-[0.1em]">
-            Minimum size
+            Taille minimale
           </h3>
           <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">
-            Below {logoUsage.minWidthPx}px on screen or {logoUsage.minWidthMm}mm
-            in print, switch to the icon-only variant.
+            Sous {logoUsage.minWidthPx} px à l’écran ou {logoUsage.minWidthMm} mm
+            en impression, utilisez l’icône seule.
           </p>
 
           <div className="mt-5 flex flex-wrap items-end gap-6 rounded-lg bg-bone-deep p-6">
@@ -64,7 +64,7 @@ export function UsageSection({ guide }: { guide: BrandGuide }) {
                 className="[&>svg]:h-auto [&>svg]:w-[160px]"
               />
               <figcaption className="mt-2 font-mono text-[10px] text-ink-muted">
-                160px · full lockup
+                160 px · logo complet
               </figcaption>
             </figure>
 
@@ -74,7 +74,7 @@ export function UsageSection({ guide }: { guide: BrandGuide }) {
                 className="[&>svg]:size-8"
               />
               <figcaption className="mt-2 font-mono text-[10px] text-ink-muted">
-                32px · icon only
+                32 px · icône seule
               </figcaption>
             </figure>
 
@@ -90,13 +90,13 @@ export function UsageSection({ guide }: { guide: BrandGuide }) {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <RuleList
-          title="Do"
+          title="À faire"
           tone="positive"
           rules={dos}
           icon={<Check size={13} strokeWidth={3} />}
         />
         <RuleList
-          title="Don't"
+          title="À éviter"
           tone="signal"
           rules={donts}
           icon={<X size={13} strokeWidth={3} />}

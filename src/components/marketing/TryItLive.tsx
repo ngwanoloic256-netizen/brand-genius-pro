@@ -20,12 +20,12 @@ import type { PhotoScene } from "@/lib/ai/photo-scenes";
  */
 
 const HUES = [
-  { name: "Navy", hex: "#12376B" },
+  { name: "Marine", hex: "#12376B" },
   { name: "Cobalt", hex: "#2F6BFF" },
-  { name: "Pine", hex: "#1F5D4C" },
-  { name: "Clay", hex: "#B4552D" },
-  { name: "Plum", hex: "#5B2E63" },
-  { name: "Ink", hex: "#1B1D22" },
+  { name: "Pin", hex: "#1F5D4C" },
+  { name: "Argile", hex: "#B4552D" },
+  { name: "Prune", hex: "#5B2E63" },
+  { name: "Encre", hex: "#1B1D22" },
 ];
 
 const SUGGESTIONS = [
@@ -33,7 +33,7 @@ const SUGGESTIONS = [
   "North Signal",
   "Verdant Clinic",
   "Atelier Frame",
-  "Harbor & Field",
+  "Saveurs de Douala",
 ];
 
 /**
@@ -88,7 +88,7 @@ export function TryItLive({ scenes }: TryItLiveProps) {
   );
 
   const accent = useMemo(() => lighten(hue, 0.3), [hue]);
-  const display = name.trim() || "Your Brand";
+  const display = name.trim() || "Votre marque";
 
   // Same mapping the server-side renderer uses: unit square -> placement quad.
   const p = scene.placement;
@@ -133,17 +133,17 @@ export function TryItLive({ scenes }: TryItLiveProps) {
         {/* Controls */}
         <div className="border-b border-white/10 p-6 md:border-b-0 md:border-r md:border-white/10 md:p-8">
           <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.2em] text-iris-soft">
-            Try it here
+            Essayez ici
           </p>
 
           <label className="block">
             <span className="mb-1.5 block text-[13px] font-semibold">
-              Brand name
+              Nom de la marque
             </span>
             <input
               value={name}
               onChange={(e) => setName(e.target.value.slice(0, 28))}
-              placeholder="Your Brand"
+              placeholder="Votre marque"
               className="w-full rounded-xl border border-white/15 bg-white/6 px-3.5 py-2.5 text-[15px] text-white outline-none transition-colors placeholder:text-white/40 focus:border-iris-soft"
             />
           </label>
@@ -179,7 +179,7 @@ export function TryItLive({ scenes }: TryItLiveProps) {
           </div>
 
           <p className="mb-2.5 mt-6 text-[13px] font-semibold">
-            Generated palette
+            Palette générée
           </p>
           <div className="flex h-9 overflow-hidden rounded-lg">
             {palette.map((swatch) => (
@@ -196,14 +196,14 @@ export function TryItLive({ scenes }: TryItLiveProps) {
             className="mt-6 inline-flex items-center gap-2 text-[13px] font-semibold text-white/70 transition-colors hover:text-white"
           >
             <Shuffle size={14} />
-            Another surface
+            Autre support
           </button>
 
           <Link
             href="/projects/new"
             className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-iris px-5 text-sm font-semibold text-white transition-colors hover:bg-iris-bright"
           >
-            Build the full identity
+            Créer l’identité complète
             <ArrowRight size={16} />
           </Link>
         </div>
@@ -214,7 +214,7 @@ export function TryItLive({ scenes }: TryItLiveProps) {
             viewBox={`0 0 ${scene.width} ${scene.height}`}
             className="h-auto w-full rounded-xl"
             role="img"
-            aria-label={`${display} on a ${scene.title.toLowerCase()}`}
+            aria-label={`${display} sur : ${scene.title.toLowerCase()}`}
           >
             <image
               href={`/mockups/${scene.file}`}

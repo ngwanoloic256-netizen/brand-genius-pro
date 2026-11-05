@@ -16,8 +16,7 @@ import type { NextConfig } from "next";
  *     guide (swatches, type specimens, placement transforms). There is no nonce
  *     path for those today, so this is honest compatibility debt rather than a
  *     considered choice.
- *   - `script-src` needs 'unsafe-inline' in development only: the dev overlay
- *     and HMR client rely on it. Production keeps it out.
+ *   - `script-src` needs 'unsafe-inline', in production as well (see below).
  *   - `img-src` needs data: and blob:. Mockups rasterise through a canvas and
  *     the PDF/ZIP exports hand the browser blob: URLs.
  *   - `font-src` allows fonts.gstatic.com because the guide loads the brand's
@@ -32,7 +31,14 @@ const csp = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
-  `script-src 'self'${isDev ? " 'unsafe-inline' 'unsafe-eval'" : ""}`,
+  /*
+   * 'unsafe-inline' est nécessaire en production aussi : l'App Router envoie les
+   * données de la page dans des <script> en ligne (`self.__next_f.push`). Sans
+   * lui, le navigateur les bloque, React ne s'hydrate jamais et la page reste
+   * figée (sections invisibles, boutons morts). Un nonce par requête serait plus
+   * strict, mais rendrait toutes les pages dynamiques.
+   */
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: blob:",
   "font-src 'self' data: https://fonts.gstatic.com",

@@ -49,7 +49,7 @@ export function LogoSection({
                     downloadSvg(variant.svg, `${slug(brandName)}-${variant.id}`)
                   }
                   className="rounded-lg border border-line px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-ink-muted transition-colors hover:border-ink hover:text-ink"
-                  title="Download SVG"
+                  title="Télécharger en SVG"
                 >
                   SVG
                 </button>
@@ -58,7 +58,7 @@ export function LogoSection({
                     downloadPng(variant.svg, `${slug(brandName)}-${variant.id}`)
                   }
                   className="inline-flex items-center gap-1 rounded-lg border border-line px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-ink-muted transition-colors hover:border-ink hover:text-ink"
-                  title="Download PNG at 4× with a transparent background"
+                  title="Télécharger en PNG 4×, fond transparent"
                 >
                   <Download size={11} />
                   PNG

@@ -5,7 +5,7 @@ import { signInAction } from "../actions";
 import { Button } from "@/components/ui/Button";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata: Metadata = { title: "Connexion" };
 
 const INPUT =
   "w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] outline-none transition-colors focus:border-ink";
@@ -18,18 +18,18 @@ export default async function LoginPage(props: PageProps<"/login">) {
   return (
     <div className="animate-rise">
       <h1 className="font-display text-3xl font-extrabold tracking-[-0.03em]">
-        Sign in
+        Connexion
       </h1>
       <p className="mt-2 text-[15px] text-ink-muted">
-        Welcome back. Your brands are where you left them.
+        Bon retour. Vos marques vous attendent.
       </p>
 
       {!isSupabaseConfigured() && (
         <p className="mt-6 rounded-xl border border-line bg-bone-deep p-3.5 text-[13px] leading-relaxed text-ink-muted">
-          This server is running in local mode — accounts are disabled. Go
-          straight to the{" "}
+          Ce serveur tourne en mode local : les comptes sont désactivés. Allez
+          directement au{" "}
           <Link href="/dashboard" className="font-semibold underline">
-            dashboard
+            tableau de bord
           </Link>
           .
         </p>
@@ -49,20 +49,20 @@ export default async function LoginPage(props: PageProps<"/login">) {
         <input type="hidden" name="next" value={next} />
 
         <label className="block">
-          <span className="mb-1.5 block text-[13px] font-semibold">Email</span>
+          <span className="mb-1.5 block text-[13px] font-semibold">E-mail</span>
           <input
             name="email"
             type="email"
             autoComplete="email"
             required
             className={INPUT}
-            placeholder="you@studio.com"
+            placeholder="vous@entreprise.com"
           />
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[13px] font-semibold">
-            Password
+            Mot de passe
           </span>
           <input
             name="password"
@@ -76,14 +76,14 @@ export default async function LoginPage(props: PageProps<"/login">) {
         </label>
 
         <Button type="submit" size="lg" className="mt-2 w-full">
-          Sign in
+          Se connecter
         </Button>
       </form>
 
       <p className="mt-6 text-[13px] text-ink-muted">
-        No account yet?{" "}
+        Pas encore de compte ?{" "}
         <Link href="/signup" className="font-semibold text-ink underline">
-          Create one
+          Créer un compte
         </Link>
       </p>
     </div>

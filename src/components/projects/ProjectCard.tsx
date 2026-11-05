@@ -28,26 +28,26 @@ function readableBrandInk(
 
 const STATUS: Record<ProjectStatus, { label: string; className: string }> = {
   draft: {
-    label: "Draft",
+    label: "Brouillon",
     className: "bg-bone-deep text-ink-muted border-line",
   },
   guide_generated: {
-    label: "Guide generated",
+    label: "Charte créée",
     className: "bg-acid/12 text-acid-deep border-acid/30",
   },
   complete: {
-    label: "Complete",
+    label: "Terminé",
     className: "bg-positive/10 text-positive-deep border-positive/25",
   },
 };
 
 function relativeDate(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
-  if (days <= 0) return "today";
-  if (days === 1) return "yesterday";
-  if (days < 30) return `${days} days ago`;
+  if (days <= 0) return "aujourd’hui";
+  if (days === 1) return "hier";
+  if (days < 30) return `il y a ${days} jours`;
   const months = Math.floor(days / 30);
-  return months === 1 ? "last month" : `${months} months ago`;
+  return months === 1 ? "le mois dernier" : `il y a ${months} mois`;
 }
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -103,11 +103,11 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <p className="line-clamp-1 text-[13px] text-ink-muted">
-          {project.industry || "No sector set"}
+          {project.industry || "Secteur non renseigné"}
         </p>
 
         <p className="mt-auto pt-3 text-xs text-ink-muted">
-          Updated {relativeDate(project.updatedAt)}
+          Modifié {relativeDate(project.updatedAt)}
           {accent && (
             <span
               className="ml-2 font-mono text-[11px]"

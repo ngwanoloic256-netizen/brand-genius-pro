@@ -5,6 +5,14 @@ import { Download, X, Maximize2 } from "lucide-react";
 import { SvgFrame } from "../SvgFrame";
 import { downloadPng, downloadSvg } from "@/lib/export/assets";
 import { CATEGORY_LABELS } from "@/lib/ai/mockups";
+
+const FAMILY_FR: Record<string, string> = {
+  "flat-lay": "vue du dessus",
+  lifestyle: "en situation",
+  "product-closeup": "gros plan produit",
+  "digital-screen": "écran",
+  signage: "signalétique",
+};
 import type { Mockup, MockupCategory } from "@/lib/types";
 
 /**
@@ -52,7 +60,7 @@ export function MockupsSection({
           <FilterChip
             active={filter === "all"}
             onClick={() => setFilter("all")}
-            label={`All (${mockups.length})`}
+            label={`Tous (${mockups.length})`}
           />
           {categories.map((category) => (
             <FilterChip
@@ -89,14 +97,14 @@ export function MockupsSection({
               <div className="flex shrink-0 gap-1">
                 <button
                   onClick={() => setZoomed(mockup)}
-                  aria-label={`View ${mockup.title} full screen`}
+                  aria-label={`Voir ${mockup.title} en plein écran`}
                   className="grid size-8 place-items-center rounded-lg border border-line text-ink-muted transition-colors hover:border-ink hover:text-ink"
                 >
                   <Maximize2 size={14} />
                 </button>
                 <button
                   onClick={() => downloadPng(mockup.svg, `${slug(brandName)}-${mockup.id}`, 2)}
-                  aria-label={`Download ${mockup.title} as PNG`}
+                  aria-label={`Télécharger ${mockup.title} en PNG`}
                   className="grid size-8 place-items-center rounded-lg border border-line text-ink-muted transition-colors hover:border-ink hover:text-ink"
                 >
                   <Download size={14} />
@@ -120,7 +128,7 @@ export function MockupsSection({
                 {zoomed.title}
               </p>
               <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">
-                {CATEGORY_LABELS[zoomed.category]} · {zoomed.family}
+                {CATEGORY_LABELS[zoomed.category]} · {FAMILY_FR[zoomed.family] ?? zoomed.family}
               </p>
             </div>
 
@@ -139,7 +147,7 @@ export function MockupsSection({
               </button>
               <button
                 onClick={() => setZoomed(null)}
-                aria-label="Close"
+                aria-label="Fermer"
                 className="grid size-9 place-items-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-white hover:text-white"
               >
                 <X size={17} />

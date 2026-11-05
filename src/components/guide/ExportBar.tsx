@@ -12,9 +12,12 @@ type State = "idle" | "working" | "done" | "error";
 export function ExportBar({
   guide,
   projectId,
+  watermark = false,
 }: {
   guide: BrandGuide;
   projectId: string;
+  /** Offre gratuite : PDF et visuels portent un filigrane. */
+  watermark?: boolean;
 }) {
   const [kit, setKit] = useState<State>("idle");
   const [pdf, setPdf] = useState<State>("idle");
@@ -60,8 +63,8 @@ export function ExportBar({
         onClick={() =>
           run(
             setKit,
-            () => downloadBrandKit(guide, (p) => setStep(p.step)),
-            "Could not build the brand kit.",
+            () => downloadBrandKit(guide, (p) => setStep(p.step), { watermark }),
+            "Impossible de préparer le kit de marque.",
           )
         }
         disabled={busy}
@@ -69,15 +72,15 @@ export function ExportBar({
         {kit === "working" ? (
           <>
             <Loader2 size={15} className="animate-spin-slow" />
-            {step || "Building"}
+            {step || "Préparation"}
           </>
         ) : kit === "done" ? (
           <>
-            <Check size={15} /> Downloaded
+            <Check size={15} /> Téléchargé
           </>
         ) : (
           <>
-            <Package size={15} /> Download everything
+            <Package size={15} /> Tout télécharger
           </>
         )}
       </Button>
@@ -86,26 +89,26 @@ export function ExportBar({
         variant="secondary"
         size="sm"
         onClick={() =>
-          run(setPdf, () => exportBrandGuidePdf(guide), "Could not build the PDF.")
+          run(setPdf, () => exportBrandGuidePdf(guide, { watermark }), "Impossible de créer le PDF.")
         }
         disabled={busy}
       >
         {pdf === "working" ? (
           <>
-            <Loader2 size={15} className="animate-spin-slow" /> Building PDF
+            <Loader2 size={15} className="animate-spin-slow" /> Création du PDF
           </>
         ) : pdf === "done" ? (
           <>
-            <Check size={15} /> Downloaded
+            <Check size={15} /> Téléchargé
           </>
         ) : (
           <>
-            <FileDown size={15} /> PDF only
+            <FileDown size={15} /> PDF seul
           </>
         )}
       </Button>
 
-      <RegenerateButton projectId={projectId} section="mockups" label="Regenerate mockups" />
+      <RegenerateButton projectId={projectId} section="mockups" label="Refaire les mockups" />
     </div>
   );
 }
@@ -132,11 +135,11 @@ export function RegenerateButton({
         body: JSON.stringify({ projectId, section }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Could not regenerate.");
+      if (!res.ok) throw new Error(data.error ?? "Impossible de refaire cette section.");
       window.location.reload();
     } catch (err) {
       setWorking(false);
-      setError(err instanceof Error ? err.message : "Could not regenerate.");
+      setError(err instanceof Error ? err.message : "Impossible de refaire cette section.");
     }
   }
 

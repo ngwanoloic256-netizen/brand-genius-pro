@@ -15,10 +15,10 @@ import { absoluteUrl } from "@/lib/site-url";
  */
 
 const CredentialsSchema = z.object({
-  email: z.string().trim().email("Enter a valid email address.").max(254),
+  email: z.string().trim().email("Saisissez une adresse e-mail valide.").max(254),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters.")
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères.")
     .max(128),
 });
 
@@ -28,9 +28,22 @@ function safeNext(value: FormDataEntryValue | null): string {
   return next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
 }
 
+/** Traduit les messages d'erreur Supabase les plus courants. */
+const AUTH_ERRORS_FR: Array<[RegExp, string]> = [
+  [/invalid login credentials/i, "E-mail ou mot de passe incorrect."],
+  [/email not confirmed/i, "Confirmez d’abord votre adresse e-mail (lien reçu par e-mail)."],
+  [/user already registered/i, "Un compte existe déjà avec cette adresse."],
+  [/rate limit|too many/i, "Trop de tentatives. Réessayez dans quelques minutes."],
+  [/password should be/i, "Mot de passe trop faible : au moins 8 caractères."],
+];
+
+function frenchAuthError(message: string): string {
+  return AUTH_ERRORS_FR.find(([re]) => re.test(message))?.[1] ?? message;
+}
+
 function failure(route: string, message: string, next: string): never {
   redirect(
-    `${route}?error=${encodeURIComponent(message)}&next=${encodeURIComponent(next)}`,
+    `${route}?error=${encodeURIComponent(frenchAuthError(message))}&next=${encodeURIComponent(next)}`,
   );
 }
 
@@ -38,7 +51,7 @@ export async function signInAction(formData: FormData) {
   const next = safeNext(formData.get("next"));
 
   if (!isSupabaseConfigured()) {
-    failure("/login", "Authentication is not configured on this server.", next);
+    failure("/login", "La connexion n’est pas configurée sur ce serveur.", next);
   }
 
   const parsed = CredentialsSchema.safeParse({
@@ -67,7 +80,7 @@ export async function signUpAction(formData: FormData) {
   const next = safeNext(formData.get("next"));
 
   if (!isSupabaseConfigured()) {
-    failure("/signup", "Authentication is not configured on this server.", next);
+    failure("/signup", "La connexion n’est pas configurée sur ce serveur.", next);
   }
 
   const parsed = CredentialsSchema.safeParse({

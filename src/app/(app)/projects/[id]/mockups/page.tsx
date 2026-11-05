@@ -30,8 +30,8 @@ export default async function MockupsPage(
     <>
       <PageHeader
         eyebrow={project.name}
-        title="Mockup gallery"
-        description={`${mockups.length} applications drawn from ${families.size} composition families. Click any mockup for the full-screen view and an HD download.`}
+        title="Galerie de mockups"
+        description={`${mockups.length} applications réparties en ${families.size} types de composition. Cliquez sur un mockup pour le voir en plein écran et le télécharger en HD.`}
         actions={
           <>
             <ButtonLink
@@ -39,12 +39,12 @@ export default async function MockupsPage(
               size="sm"
               href={`/projects/${project.id}`}
             >
-              <ArrowLeft size={15} /> Brand guide
+              <ArrowLeft size={15} /> Charte graphique
             </ButtonLink>
             <RegenerateButton
               projectId={project.id}
               section="mockups"
-              label="Regenerate all"
+              label="Tout refaire"
             />
           </>
         }

@@ -80,14 +80,14 @@ export function ShowcaseCarousel({ slides }: { slides: ShowcaseSlide[] }) {
         <div className="flex gap-3">
           <button
             onClick={() => take(index - 1)}
-            aria-label="Previous example"
+            aria-label="Exemple précédent"
             className="grid size-12 place-items-center rounded-full border border-white/12 text-white/70 transition-colors hover:bg-white/10 hover:text-white sm:size-14"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={() => take(index + 1)}
-            aria-label="Next example"
+            aria-label="Exemple suivant"
             className="grid size-12 place-items-center rounded-full border border-white/12 text-white/70 transition-colors hover:bg-white/10 hover:text-white sm:size-14"
           >
             <ChevronRight size={20} />
@@ -151,7 +151,7 @@ export function ShowcaseCarousel({ slides }: { slides: ShowcaseSlide[] }) {
             <button
               key={item.id}
               onClick={() => take(i)}
-              aria-label={`Show ${item.title}`}
+              aria-label={`Afficher ${item.title}`}
               aria-current={i === index}
               className={`h-1.5 rounded-full transition-all duration-500 ${
                 i === index ? "w-10 bg-iris-bright" : "w-4 bg-white/25 hover:bg-white/40"

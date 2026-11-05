@@ -12,7 +12,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = await props.params;
   const project = await getProject(id);
-  return { title: project ? `${project.name} — Settings` : "Settings" };
+  return { title: project ? `${project.name} — Réglages` : "Réglages" };
 }
 
 const INPUT =
@@ -30,11 +30,11 @@ export default async function BrandSettingsPage(
     <>
       <PageHeader
         eyebrow={project.name}
-        title="Brand settings"
-        description="Edit the brief, regenerate individual sections, or remove the project."
+        title="Réglages de la marque"
+        description="Modifiez le brief, refaites une section ou supprimez le projet."
         actions={
           <ButtonLink variant="ghost" size="sm" href={`/projects/${project.id}`}>
-            <ArrowLeft size={15} /> Brand guide
+            <ArrowLeft size={15} /> Charte graphique
           </ButtonLink>
         }
       />
@@ -42,10 +42,9 @@ export default async function BrandSettingsPage(
       <div className="mx-auto w-full max-w-3xl space-y-6 px-5 py-8 sm:px-8">
         {/* Brief */}
         <section className="rounded-xl border border-line bg-white p-6">
-          <h2 className="font-display text-lg font-bold">Brand brief</h2>
+          <h2 className="font-display text-lg font-bold">Brief de la marque</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-ink-muted">
-            These fields feed every regeneration. Changing them does not alter
-            the existing guide until you regenerate a section.
+            Ces champs servent à chaque nouvelle création. Les modifier ne change pas la charte actuelle tant que vous ne refaites pas une section.
           </p>
 
           <form action={updateBriefAction} className="mt-6 grid gap-5">
@@ -53,7 +52,7 @@ export default async function BrandSettingsPage(
 
             <label className="block">
               <span className="mb-1.5 block text-[13px] font-semibold">
-                Brand name
+                Nom de la marque
               </span>
               <input
                 name="name"
@@ -66,7 +65,7 @@ export default async function BrandSettingsPage(
 
             <label className="block">
               <span className="mb-1.5 block text-[13px] font-semibold">
-                Sector
+                Secteur
               </span>
               <input
                 name="industry"
@@ -78,7 +77,7 @@ export default async function BrandSettingsPage(
 
             <label className="block">
               <span className="mb-1.5 block text-[13px] font-semibold">
-                What it stands for
+                Ce que défend la marque
               </span>
               <textarea
                 name="keywords"
@@ -89,17 +88,16 @@ export default async function BrandSettingsPage(
             </label>
 
             <div className="flex justify-end">
-              <Button type="submit">Save brief</Button>
+              <Button type="submit">Enregistrer le brief</Button>
             </div>
           </form>
         </section>
 
         {/* Regeneration */}
         <section className="rounded-xl border border-line bg-white p-6">
-          <h2 className="font-display text-lg font-bold">Regenerate</h2>
+          <h2 className="font-display text-lg font-bold">Refaire une section</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-ink-muted">
-            Each stage of the pipeline runs independently. Regenerating the
-            palette or the logo also rebuilds the artefacts that depend on it.
+            Chaque étape est indépendante. Refaire la palette ou le logo met aussi à jour tout ce qui en dépend.
           </p>
 
           {project.guide ? (
@@ -112,7 +110,7 @@ export default async function BrandSettingsPage(
               <RegenerateButton
                 projectId={project.id}
                 section="typography"
-                label="Typography"
+                label="Typographie"
               />
               <RegenerateButton
                 projectId={project.id}
@@ -127,7 +125,7 @@ export default async function BrandSettingsPage(
             </div>
           ) : (
             <p className="mt-5 text-[13px] text-ink-muted">
-              This project has no guide yet.
+              Ce projet n’a pas encore de charte.
             </p>
           )}
         </section>
@@ -136,8 +134,7 @@ export default async function BrandSettingsPage(
         <section className="rounded-xl border border-line bg-white p-6">
           <h2 className="font-display text-lg font-bold">Exports</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-ink-muted">
-            Logo assets download as SVG and 4× PNG with transparent
-            backgrounds. The full guide exports to PDF from the guide page.
+            Les logos se téléchargent en SVG et en PNG 4× sur fond transparent. La charte complète s’exporte en PDF depuis sa page.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <ButtonLink
@@ -145,14 +142,14 @@ export default async function BrandSettingsPage(
               size="sm"
               href={`/projects/${project.id}/mockups`}
             >
-              <Images size={15} /> Mockup gallery
+              <Images size={15} /> Galerie de mockups
             </ButtonLink>
             <ButtonLink
               variant="secondary"
               size="sm"
               href={`/projects/${project.id}#logo`}
             >
-              Logo assets
+              Fichiers du logo
             </ButtonLink>
           </div>
         </section>
@@ -160,17 +157,16 @@ export default async function BrandSettingsPage(
         {/* Danger zone */}
         <section className="rounded-xl border border-signal/25 bg-signal/[0.03] p-6">
           <h2 className="font-display text-lg font-bold text-signal-deep">
-            Delete this project
+            Supprimer ce projet
           </h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-ink-muted">
-            The guide, logo assets, and mockups are removed permanently. This
-            cannot be undone.
+            La charte, les logos et les mockups seront supprimés définitivement. Impossible d’annuler.
           </p>
 
           <form action={deleteProjectAction} className="mt-5">
             <input type="hidden" name="projectId" value={project.id} />
             <Button type="submit" variant="danger" size="sm">
-              <Trash2 size={15} /> Delete {project.name}
+              <Trash2 size={15} /> Supprimer {project.name}
             </Button>
           </form>
         </section>

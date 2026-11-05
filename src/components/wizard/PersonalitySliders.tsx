@@ -20,27 +20,27 @@ const AXES: Array<{
 }> = [
   {
     key: "seriousPlayful",
-    left: "Serious",
-    right: "Playful",
-    hint: "How much licence the brand takes with its own tone.",
+    left: "Sérieuse",
+    right: "Ludique",
+    hint: "La liberté que la marque prend avec son ton.",
   },
   {
     key: "classicModern",
-    left: "Classic",
-    right: "Modern",
-    hint: "Whether it borrows authority from the past or the future.",
+    left: "Classique",
+    right: "Moderne",
+    hint: "Elle s’appuie sur la tradition ou sur l’avenir.",
   },
   {
     key: "massPremium",
-    left: "Mass-market",
-    right: "Premium",
-    hint: "Who it is priced and positioned for.",
+    left: "Grand public",
+    right: "Haut de gamme",
+    hint: "À qui s’adressent son prix et son positionnement.",
   },
   {
     key: "quietLoud",
-    left: "Quiet",
-    right: "Loud",
-    hint: "How hard it works to be noticed.",
+    left: "Discrète",
+    right: "Voyante",
+    hint: "À quel point elle cherche à se faire remarquer.",
   },
 ];
 
@@ -66,12 +66,10 @@ export function PersonalitySliders({
         />
         <span>
           <span className="block text-[13px] font-semibold">
-            Set the personality myself
+            Je règle la personnalité moi-même
           </span>
           <span className="mt-1 block text-[13px] leading-relaxed text-ink-muted">
-            Leave this off and the direction is chosen from your sector and the
-            words in your brief — which produces a more committed result than
-            four sliders left in the middle.
+            Si vous laissez cette option désactivée, la direction est choisie selon votre secteur et les mots de votre brief, ce qui donne un résultat plus affirmé que quatre curseurs au milieu.
           </span>
         </span>
       </label>
@@ -93,7 +91,7 @@ export function PersonalitySliders({
                 onChange={(e) =>
                   onChange({ ...value, [key]: Number(e.target.value) / 100 })
                 }
-                aria-label={`${left} to ${right}`}
+                aria-label={`De ${left} à ${right}`}
                 className="mt-2 w-full accent-[var(--color-acid)]"
               />
 

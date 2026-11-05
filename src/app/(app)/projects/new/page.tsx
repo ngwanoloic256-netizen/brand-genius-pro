@@ -9,19 +9,19 @@ const MODES: CreationMode[] = ["generate_logo", "import_logo", "guide_only"];
 
 const HEADINGS: Record<CreationMode, { title: string; description: string }> = {
   generate_logo: {
-    title: "Create a brand",
+    title: "Créer une marque",
     description:
-      "A logo, a full guide, and contextual mockups — generated from your brief.",
+      "Un logo, une charte complète et des mockups en situation, créés à partir de votre brief.",
   },
   import_logo: {
-    title: "Import a logo",
+    title: "Importer un logo",
     description:
-      "Bring the logo you already use. We derive the rest of the system from it.",
+      "Apportez le logo que vous utilisez déjà. Nous en tirons le reste du système.",
   },
   guide_only: {
-    title: "Brand guide from scratch",
+    title: "Charte sans logo",
     description:
-      "Colour, type, and voice, without a logo. Add one later and the guide adapts.",
+      "Couleurs, polices et ton, sans logo. Ajoutez-en un plus tard, la charte s’adapte.",
   },
 };
 
@@ -39,7 +39,7 @@ export default async function NewProjectPage(
   return (
     <>
       <PageHeader
-        eyebrow="New project"
+        eyebrow="Nouveau projet"
         title={heading.title}
         description={heading.description}
       />

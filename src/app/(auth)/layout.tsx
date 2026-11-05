@@ -15,17 +15,15 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
         <div className="absolute inset-0 grain-overlay opacity-40" aria-hidden />
 
         <p className="relative text-[11px] font-bold uppercase tracking-[0.16em] text-accent-soft">
-          Brand systems, generated
+          Des identités de marque, créées pour vous
         </p>
 
         <div className="relative">
           <p className="font-display text-[clamp(2rem,3.4vw,3rem)] font-extrabold leading-[1.05] tracking-[-0.035em]">
-            A logo is not an identity.
+            Un logo n’est pas une identité.
           </p>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/55">
-            A palette that holds up in print, type that survives a spreadsheet,
-            rules someone can actually follow, and mockups that look like real
-            products. That is the deliverable.
+            Une palette qui tient à l’impression, des polices lisibles partout, des règles applicables et des mockups qui ressemblent à de vrais produits. Voilà le livrable.
           </p>
         </div>
 

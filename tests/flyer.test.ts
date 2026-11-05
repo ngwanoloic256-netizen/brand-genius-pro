@@ -161,7 +161,7 @@ describe("flyer quality gate", () => {
     });
     const cramped = { ...flyer, whitespaceRatio: 0.2 };
     const check = checkFlyer(cramped, guide).find((c) =>
-      c.label.includes("White space"),
+      c.label.includes("Espace blanc"),
     )!;
     expect(check.passes).toBe(false);
   });
@@ -174,7 +174,7 @@ describe("flyer quality gate", () => {
     });
     const flat = { ...flyer, hierarchyRatio: 2.1 };
     const check = checkFlyer(flat, guide).find((c) =>
-      c.label.includes("Hierarchy"),
+      c.label.includes("hiérarchie"),
     )!;
     expect(check.passes).toBe(false);
   });

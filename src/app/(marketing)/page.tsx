@@ -23,21 +23,22 @@ import { Ambience } from "@/components/marketing/Ambience";
 import { ART_DIRECTIONS } from "@/lib/ai/art-direction";
 import { PHOTO_SCENES } from "@/lib/ai/photo-scenes";
 import { FLYER_FORMATS } from "@/lib/ai/flyer";
+import { CATEGORY_LABELS } from "@/lib/ai/mockups";
 import { heroGuide, sampleGuides } from "@/lib/marketing-samples";
 import type { MockupFamily } from "@/lib/types";
 
 /** What each composition family is actually demonstrating. */
 const FAMILY_BLURB: Record<MockupFamily, string> = {
   "flat-lay":
-    "Shot from above, so the mark is judged flat and at true colour before anything is wrapped around a curve.",
+    "Vue du dessus : le logo est jugé à plat, dans sa vraie couleur, avant d’être posé sur une courbe.",
   lifestyle:
-    "The brand where someone would actually meet it, at the size and angle a passer-by gets rather than a designer.",
+    "La marque là où les gens la croisent vraiment, à la taille et sous l’angle d’un passant, pas d’un graphiste.",
   "product-closeup":
-    "Close enough to see the mark hold its shape at small size — the test most logos quietly fail.",
+    "Assez près pour voir si le logo tient en petite taille, le test que la plupart des logos ratent.",
   "digital-screen":
-    "On screen, where the palette has to clear contrast rules rather than merely look good on a moodboard.",
+    "À l’écran, là où la palette doit respecter les règles de contraste, pas seulement faire joli.",
   signage:
-    "Large format, where clear space and minimum size stop being guidance and start being structural.",
+    "En grand format, là où la zone de protection et la taille minimale deviennent essentielles.",
 };
 
 /**
@@ -51,48 +52,48 @@ const FAMILY_BLURB: Record<MockupFamily, string> = {
 const BRAND_SLIDES: ShowcaseSlide[] = [
   {
     id: "bg-cards",
-    title: "Business cards",
-    category: "Print",
+    title: "Cartes de visite",
+    category: "Impression",
     description:
-      "The mark at its smallest working size, on uncoated stock. Nothing but the symbol — the wordmark is not needed once the shape carries.",
+      "Le logo à sa plus petite taille utile, sur papier non couché. Le symbole seul suffit quand la forme est forte.",
     image: "/brand/mockups/nb-cards.webp",
-    alt: "BRAND GENIUS mark printed on a stack of business cards",
+    alt: "Logo BRAND GENIUS imprimé sur une pile de cartes de visite",
   },
   {
     id: "bg-tote",
-    title: "Canvas tote",
-    category: "Apparel",
+    title: "Tote bag en toile",
+    category: "Textile",
     description:
-      "The same geometry screen-printed at scale. A mark built from a circle and one rule survives the weave; a detailed one would not.",
+      "La même géométrie sérigraphiée en grand. Un logo simple résiste au tissage ; un logo chargé, non.",
     image: "/brand/mockups/gpt-tote.webp",
-    alt: "BRAND GENIUS mark printed on a canvas tote bag",
+    alt: "Logo BRAND GENIUS imprimé sur un tote bag en toile",
   },
   {
     id: "bg-facade",
-    title: "Building signage",
-    category: "Environmental",
+    title: "Enseigne de façade",
+    category: "Signalétique",
     description:
-      "Fabricated as dimensional signage on cast concrete. At this size the mark stops being a logo and becomes architecture — which is the test a geometric symbol has to pass.",
+      "Enseigne en relief sur béton. À cette taille, le logo devient de l’architecture : le vrai test d’un symbole géométrique.",
     image: "/brand/mockups/env-facade.webp",
-    alt: "BRAND GENIUS mark as dimensional signage on a concrete building facade",
+    alt: "Logo BRAND GENIUS en enseigne sur une façade en béton",
   },
   {
     id: "bg-door",
-    title: "Entrance glazing",
-    category: "Environmental",
+    title: "Vitrine d’entrée",
+    category: "Signalétique",
     description:
-      "Frosted vinyl on a full-height glass door. The violet reads muted through the frosting, exactly as it would on the real thing.",
+      "Vinyle dépoli sur une porte vitrée. Le violet paraît plus doux à travers le dépoli, comme en vrai.",
     image: "/brand/mockups/env-door.webp",
-    alt: "BRAND GENIUS mark applied as frosted vinyl on a glass entrance door",
+    alt: "Logo BRAND GENIUS en vinyle dépoli sur une porte vitrée",
   },
   {
     id: "bg-box",
-    title: "Packaging",
-    category: "Packaging",
+    title: "Emballage",
+    category: "Emballage",
     description:
-      "Single-colour print on unbleached board. The palette was derived in OKLCH, so the violet holds its identity from screen to uncoated card.",
+      "Impression une couleur sur carton brut. La palette est calculée en OKLCH : le violet reste le même de l’écran au carton.",
     image: "/brand/mockups/gpt-box.webp",
-    alt: "BRAND GENIUS mark printed on a plain cardboard box",
+    alt: "Logo BRAND GENIUS imprimé sur une boîte en carton",
   },
 ];
 
@@ -117,7 +118,7 @@ export default function LandingPage() {
    * showed. Taking the first three unfiltered put "Business cards" and a tote
    * in the reel twice, which reads as padding rather than range.
    */
-  const covered = /card|tote|box|packag|sign|reception/i;
+  const covered = /card|carte|tote|box|boîte|packag|emballage|sign|enseigne|reception|accueil/i;
   const slides: ShowcaseSlide[] = [
     ...BRAND_SLIDES,
     ...hero.mockups
@@ -126,7 +127,7 @@ export default function LandingPage() {
       .map((mockup) => ({
         id: mockup.id,
         title: mockup.title,
-        category: mockup.category,
+        category: CATEGORY_LABELS[mockup.category],
         description: FAMILY_BLURB[mockup.family],
         svg: mockup.svg,
       })),
@@ -163,16 +164,16 @@ function SiteHeader() {
 
         <nav className="hidden items-center gap-7 text-[14px] font-medium text-white/60 md:flex">
           <a href="#showcase" className="transition-colors hover:text-white">
-            Showcase
+            Réalisations
           </a>
           <a href="#features" className="transition-colors hover:text-white">
-            Features
+            Fonctionnalités
           </a>
           <a href="#gallery" className="transition-colors hover:text-white">
-            Gallery
+            Galerie
           </a>
           <a href="#pricing" className="transition-colors hover:text-white">
-            Pricing
+            Tarifs
           </a>
         </nav>
 
@@ -181,13 +182,13 @@ function SiteHeader() {
             href="/login"
             className="hidden px-2 text-[14px] font-semibold text-white/60 transition-colors hover:text-white sm:block"
           >
-            Sign in
+            Se connecter
           </Link>
           <Link
             href="/projects/new"
             className="inline-flex h-10 items-center gap-2 rounded-xl bg-iris px-5 text-[12px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_10px_30px_-8px_rgb(79_70_229_/_0.8)] transition-colors hover:bg-iris-bright"
           >
-            Start free
+            Essai gratuit
             <ArrowRight size={15} />
           </Link>
         </div>
@@ -207,20 +208,17 @@ function Hero() {
       <div className="relative z-10 mx-auto max-w-4xl text-center">
         <Reveal>
           <span className="mb-7 inline-block rounded-full border border-iris-soft/25 bg-iris/20 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-iris-soft">
-            Art direction first, then everything else
+            La direction artistique d’abord, le reste ensuite
           </span>
 
           <h1 className="font-display text-[clamp(2.75rem,9vw,5.5rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
-            BUILD YOUR
+            CRÉEZ TOUTE
             <br />
-            <span className="text-aurora">WHOLE IDENTITY</span>
+            <span className="text-aurora">VOTRE IDENTITÉ</span>
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-[17px] leading-relaxed text-white/60 sm:text-lg">
-            One brief becomes a vector logo in five variants, a brand guide with
-            print codes and usage rules, photoreal mockups, and print-ready
-            flyers. Coherent, because every piece is derived from the same
-            direction.
+            Un seul brief devient un logo vectoriel en cinq versions, une charte graphique avec codes couleur et règles d’usage, des mockups photo réalistes, des flyers prêts à imprimer et un kit réseaux sociaux. Tout est cohérent, car tout part de la même direction.
           </p>
 
           <div className="mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -228,7 +226,7 @@ function Hero() {
               href="/projects/new"
               className="group inline-flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-iris px-9 text-[13px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_24px_60px_-15px_rgb(79_70_229_/_0.85)] transition-colors hover:bg-iris-bright sm:w-auto"
             >
-              Build a brand free
+              Créer ma marque gratuitement
               <ArrowRight
                 size={18}
                 className="transition-transform group-hover:translate-x-1"
@@ -238,12 +236,12 @@ function Hero() {
               href="#showcase"
               className="glass-night inline-flex h-14 w-full items-center justify-center rounded-2xl px-9 text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10 sm:w-auto"
             >
-              See the output
+              Voir le résultat
             </a>
           </div>
 
           <p className="mt-6 text-[13px] text-white/50">
-            No account needed to try it. No card, ever, on the free plan.
+            Pas besoin de compte pour essayer. Aucun paiement sur l’offre gratuite.
           </p>
         </Reveal>
       </div>
@@ -261,10 +259,10 @@ function Showcase({ slides }: { slides: ShowcaseSlide[] }) {
         <Reveal>
           <div className="mb-14 max-w-2xl">
             <h2 className="font-display text-[clamp(2rem,5.5vw,3.5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
-              EVERY SURFACE,
+              CHAQUE SUPPORT,
               <br />
               <span className="font-serif italic text-white/50">
-                one system.
+                un seul système.
               </span>
             </h2>
             {/*
@@ -275,10 +273,7 @@ function Showcase({ slides }: { slides: ShowcaseSlide[] }) {
               tally means the sentence survives the reel changing.
             */}
             <p className="mt-6 text-[17px] leading-relaxed text-white/60">
-              The photographs are our own identity — the mark this product
-              generated for BRAND GENIUS, printed, fabricated and shot. The
-              drawn ones are composited: a single vector mark, recoloured and
-              placed on a measured spot. Same system, two ways of proving it.
+              Les photos montrent notre propre identité : le logo que l’outil a créé pour BRAND GENIUS, imprimé, fabriqué et photographié. Les visuels dessinés sont composés : un seul logo vectoriel, recoloré et placé avec précision. Le même système, deux preuves.
             </p>
           </div>
         </Reveal>
@@ -295,38 +290,38 @@ const FEATURES = [
   {
     icon: Zap,
     tone: "text-amber-300",
-    title: "One brief in",
-    body: "A name, a sector, a few words on personality. The direction, palette, type and geometry all follow from it.",
+    title: "Un seul brief",
+    body: "Un nom, un secteur, quelques mots sur la personnalité. La direction, la palette, les polices et les formes en découlent.",
   },
   {
     icon: Palette,
     tone: "text-blush",
-    title: "Colour that holds up",
-    body: "Ramps derived in OKLCH so the steps look evenly spaced, with every pairing contrast-checked before you see it.",
+    title: "Des couleurs qui tiennent",
+    body: "Des nuances calculées en OKLCH pour des écarts réguliers, et chaque association vérifiée pour le contraste.",
   },
   {
     icon: Layers,
     tone: "text-iris-soft",
-    title: "Five logo variants",
-    body: "Full colour, monochrome, inverted, icon-only and horizontal — drawn from one mark, so they stay a family.",
+    title: "Cinq versions du logo",
+    body: "Couleur, monochrome, inversé, icône seule et horizontal : tous issus du même symbole, donc cohérents.",
   },
   {
     icon: Globe,
     tone: "text-sky-300",
-    title: "Mockups, not renders",
-    body: "Photographed backplates with your vector lockup composited onto a measured placement, never a flat overlay.",
+    title: "Des mockups photo réalistes",
+    body: "De vraies photos avec votre logo vectoriel posé selon la perspective, la lumière et la matière du support.",
   },
   {
     icon: Shield,
     tone: "text-emerald-300",
-    title: "Print-ready flyers",
-    body: "A6 to A4 at true size, with 3mm bleed, a safe zone, and a layout drawn only from what the direction permits.",
+    title: "Flyers prêts à imprimer",
+    body: "Du A6 au A4 en taille réelle, avec 3 mm de fond perdu, une zone de sécurité et une mise en page fidèle à la direction.",
   },
   {
     icon: Smartphone,
     tone: "text-lilac",
-    title: "Everything exports",
-    body: "SVG and transparent PNG for the marks, a full PDF for the guide. Yours to hand to a printer or a developer.",
+    title: "Kit réseaux sociaux et exports",
+    body: "Visuels Instagram, Facebook, LinkedIn, WhatsApp et YouTube, logos en SVG et PNG transparent, charte complète en PDF.",
   },
 ];
 
@@ -337,11 +332,10 @@ function Features() {
         <Reveal>
           <div className="mb-16 text-center">
             <h2 className="font-display text-[clamp(2rem,5.5vw,3.5rem)] font-extrabold tracking-[-0.04em]">
-              WHAT YOU GET
+              CE QUE VOUS OBTENEZ
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-relaxed text-white/60">
-              Not a logo and a colour swatch. The whole system, consistent
-              because it is derived rather than assembled.
+              Pas juste un logo et une couleur. Tout le système, cohérent parce qu’il est calculé et non bricolé.
             </p>
           </div>
         </Reveal>
@@ -384,16 +378,14 @@ function TryIt() {
         <Reveal>
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="max-w-2xl font-display text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
-              TYPE YOUR NAME.
+              TAPEZ VOTRE NOM.
               <br />
               <span className="font-serif italic text-white/50">
-                Watch it land.
+                Voyez le résultat.
               </span>
             </h2>
             <p className="max-w-sm text-[15px] leading-relaxed text-white/60">
-              This runs entirely in your browser — no account, no waiting. The
-              mockup underneath is a real photograph, and the mark on it is
-              vector at your exact colour.
+              Tout se passe dans votre navigateur, sans compte ni attente. Le fond est une vraie photo, et le logo est vectoriel, dans votre couleur exacte.
             </p>
           </div>
         </Reveal>
@@ -409,18 +401,18 @@ function TryIt() {
 const PROBLEMS = [
   {
     icon: Copy,
-    title: "Logos that could belong to anyone",
-    body: "Generated from the same handful of shapes as every other brand in the sector. Recognisable as AI output, not as you.",
+    title: "Des logos interchangeables",
+    body: "Faits avec les mêmes formes que toutes les marques du secteur. On reconnaît l’IA, pas votre entreprise.",
   },
   {
     icon: FileWarning,
-    title: "Guides nobody can follow",
-    body: "A palette in a PNG, fonts named in a chat message, no clear space, no minimum size. Six months later nothing matches.",
+    title: "Des chartes inutilisables",
+    body: "Une palette dans une image, des polices citées dans un message, aucune règle. Six mois plus tard, plus rien ne colle.",
   },
   {
     icon: Repeat,
-    title: "Mockups that all look the same",
-    body: "Eight business cards at eight angles. Nothing showing how the brand behaves on a shopfront, a screen, or a package.",
+    title: "Des mockups tous identiques",
+    body: "Huit cartes de visite sous huit angles. Rien sur une vitrine, un écran ou un emballage.",
   },
 ];
 
@@ -432,9 +424,9 @@ function Problem() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-24">
         <Reveal>
           <h2 className="max-w-2xl font-display text-[clamp(2rem,5vw,3rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
-            THREE WAYS IT
+            TROIS ERREURS
             <br />
-            <span className="font-serif italic text-white/50">goes wrong.</span>
+            <span className="font-serif italic text-white/50">fréquentes.</span>
           </h2>
         </Reveal>
 
@@ -472,16 +464,14 @@ function Gallery({ guides }: { guides: ReturnType<typeof sampleGuides> }) {
         <Reveal>
           <div className="mb-14 max-w-2xl">
             <h2 className="font-display text-[clamp(2rem,5.5vw,3.5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
-              FOUR SECTORS,
+              QUATRE SECTEURS,
               <br />
               <span className="font-serif italic text-white/50">
-                four different answers.
+                quatre réponses différentes.
               </span>
             </h2>
             <p className="mt-6 text-[17px] leading-relaxed text-white/60">
-              A roastery, a data platform, a clinic and a design studio — each
-              with its own palette, type pairing and applications. The direction
-              is chosen first, which is why they do not rhyme.
+              Une torréfaction, une plateforme de données, une clinique et un studio de design : chacun a sa palette, ses polices et ses supports. La direction est choisie d’abord, c’est pourquoi ils ne se ressemblent pas.
             </p>
           </div>
         </Reveal>
@@ -543,11 +533,10 @@ function Pricing() {
         <Reveal>
           <div className="text-center">
             <h2 className="font-display text-[clamp(2rem,5.5vw,3.5rem)] font-extrabold tracking-[-0.04em]">
-              SIMPLE PRICING
+              DES TARIFS SIMPLES
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-relaxed text-white/60">
-              Everything works before you pay. The free plan is the whole system
-              with watermarked exports, not a locked demo.
+              Tout fonctionne avant de payer. L’offre gratuite donne tout le système avec des exports filigranés. Paiement par Mobile Money ou carte avec SasPay.
             </p>
           </div>
         </Reveal>
@@ -569,10 +558,10 @@ function Pricing() {
  * scores, which would be invented rather than measured.
  */
 const NUMBERS = [
-  { value: ART_DIRECTIONS.length, label: "Art directions" },
-  { value: 5, label: "Logo variants" },
-  { value: PHOTO_SCENES.length, label: "Mockup scenes" },
-  { value: Object.keys(FLYER_FORMATS).length, label: "Flyer formats" },
+  { value: ART_DIRECTIONS.length, label: "Directions artistiques" },
+  { value: 5, label: "Versions du logo" },
+  { value: PHOTO_SCENES.length, label: "Scènes de mockup" },
+  { value: Object.keys(FLYER_FORMATS).length, label: "Formats de flyer" },
 ];
 
 function Numbers() {
@@ -606,16 +595,15 @@ function FinalCta() {
       <div className="relative z-10 mx-auto max-w-4xl px-5 py-24 text-center sm:px-8 lg:py-32">
         <Reveal>
           <h2 className="font-display text-[clamp(2.5rem,8vw,5rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
-            READY TO
+            PRÊT À
             <br />
             <span className="font-serif italic text-white/50">
-              look like you?
+              vous ressembler ?
             </span>
           </h2>
 
           <p className="mx-auto mt-8 max-w-xl text-[17px] leading-relaxed text-white/60">
-            Start with a name and a sector. You will have the full system on
-            screen before you decide whether it is worth paying for.
+            Commencez par un nom et un secteur. Vous verrez tout le système à l’écran avant de décider de payer.
           </p>
 
           <Link
@@ -623,7 +611,7 @@ function FinalCta() {
             className="mt-11 inline-flex h-14 items-center justify-center gap-3 rounded-2xl bg-white px-10 text-[13px] font-bold uppercase tracking-[0.14em] text-night transition-transform hover:scale-[1.02]"
           >
             <Sparkles size={17} />
-            Build a brand free
+            Créer ma marque gratuitement
           </Link>
         </Reveal>
       </div>
@@ -639,16 +627,16 @@ function SiteFooter() {
 
         <nav className="flex flex-wrap gap-x-8 gap-y-3 text-[12px] font-bold uppercase tracking-[0.14em] text-white/50">
           <a href="#showcase" className="transition-colors hover:text-white">
-            Showcase
+            Réalisations
           </a>
           <a href="#features" className="transition-colors hover:text-white">
-            Features
+            Fonctionnalités
           </a>
           <a href="#pricing" className="transition-colors hover:text-white">
-            Pricing
+            Tarifs
           </a>
           <Link href="/login" className="transition-colors hover:text-white">
-            Sign in
+            Se connecter
           </Link>
         </nav>
 

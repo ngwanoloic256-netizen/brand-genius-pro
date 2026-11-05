@@ -4,83 +4,27 @@ import Link from "next/link";
 import { useState } from "react";
 import { Check } from "lucide-react";
 
+import {
+  BEST_SAVING,
+  PLANS,
+  annualPerMonth,
+  formatFcfa,
+  type Plan,
+} from "@/lib/billing/plans";
+
 /**
- * Pricing, with the monthly/annual switch.
+ * Tarifs avec le choix mensuel / annuel.
  *
- * The annual figure is shown as the per-month equivalent with the full charge
- * stated underneath, because quoting "€20" and billing €240 once is the thing
- * that makes people distrust a pricing page. The saving is computed from the
- * two real numbers rather than typed in, so it cannot drift out of step with
- * the prices when they change.
+ * L'annuel est affiché en équivalent mensuel avec le montant réellement payé
+ * en dessous : annoncer « 8 300 » puis prélever 99 000 d'un coup est ce qui
+ * fait perdre confiance. Les prix et l'économie viennent de `PLANS`, la même
+ * source que le paiement SasPay.
  */
 
-interface Plan {
-  name: string;
-  monthly: number;
-  annualMonthly: number;
-  tagline: string;
-  features: string[];
-  cta: string;
-  href: string;
-  featured: boolean;
+function hrefFor(plan: Plan, annual: boolean): string {
+  if (plan.id === "free") return "/projects/new";
+  return `/abonnement?plan=${plan.id}&cycle=${annual ? "annual" : "monthly"}`;
 }
-
-const PLANS: Plan[] = [
-  {
-    name: "Free",
-    monthly: 0,
-    annualMonthly: 0,
-    tagline: "See the whole system before paying for it.",
-    features: [
-      "1 brand project",
-      "Full guide on screen",
-      "Watermarked exports",
-      "4 mockups",
-    ],
-    cta: "Start free",
-    href: "/projects/new",
-    featured: false,
-  },
-  {
-    name: "Pro",
-    monthly: 24,
-    annualMonthly: 19,
-    tagline: "For founders and in-house teams shipping one brand properly.",
-    features: [
-      "Unlimited brand projects",
-      "HD exports, no watermark",
-      "Full PDF brand guide",
-      "12 mockups per project",
-      "Regenerate any section",
-    ],
-    cta: "Choose Pro",
-    href: "/signup",
-    featured: true,
-  },
-  {
-    name: "Studio",
-    monthly: 79,
-    annualMonthly: 63,
-    tagline: "For agencies running client work at volume.",
-    features: [
-      "Everything in Pro",
-      "Unlimited client brands",
-      "Multi-user workspace",
-      "Shared asset library",
-      "Priority generation",
-    ],
-    cta: "Choose Studio",
-    href: "/signup",
-    featured: false,
-  },
-];
-
-/** Largest annual saving across the paid plans, as a whole percent. */
-const BEST_SAVING = Math.max(
-  ...PLANS.filter((p) => p.monthly > 0).map((p) =>
-    Math.round((1 - p.annualMonthly / p.monthly) * 100),
-  ),
-);
 
 export function PricingPlans() {
   const [annual, setAnnual] = useState(true);
@@ -93,13 +37,13 @@ export function PricingPlans() {
             annual ? "text-white/60" : "text-white"
           }`}
         >
-          Monthly
+          Mensuel
         </span>
 
         <button
           role="switch"
           aria-checked={annual}
-          aria-label="Bill annually"
+          aria-label="Paiement annuel"
           onClick={() => setAnnual((v) => !v)}
           className="relative h-7 w-14 rounded-full bg-white/12 p-1 transition-colors hover:bg-white/20"
         >
@@ -116,21 +60,21 @@ export function PricingPlans() {
               annual ? "text-white" : "text-white/60"
             }`}
           >
-            Annual
+            Annuel
           </span>
           <span className="rounded-full border border-iris-soft/30 bg-iris/25 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-iris-soft">
-            Save {BEST_SAVING}%
+            −{BEST_SAVING} %
           </span>
         </div>
       </div>
 
       <div className="mt-12 grid gap-6 md:grid-cols-3">
         {PLANS.map((plan) => {
-          const price = annual ? plan.annualMonthly : plan.monthly;
+          const price = annual ? annualPerMonth(plan) : plan.monthly;
 
           return (
             <div
-              key={plan.name}
+              key={plan.id}
               className={`flex flex-col rounded-3xl p-8 transition-transform duration-200 hover:-translate-y-1 sm:p-10 ${
                 plan.featured
                   ? "bg-iris shadow-[0_24px_80px_-20px_rgb(79_70_229_/_0.7)]"
@@ -139,7 +83,7 @@ export function PricingPlans() {
             >
               {plan.featured && (
                 <span className="mb-4 text-[11px] font-bold uppercase tracking-[0.16em] text-white/85">
-                  Most popular
+                  Le plus choisi
                 </span>
               )}
 
@@ -148,13 +92,13 @@ export function PricingPlans() {
               </h3>
 
               <p className="mt-3 font-display text-[2.75rem] font-extrabold leading-none tracking-[-0.04em]">
-                €{price}
+                {formatFcfa(price)}
                 <span
-                  className={`ml-1 text-sm font-medium ${
+                  className={`ml-1.5 text-sm font-medium tracking-normal ${
                     plan.featured ? "text-white/85" : "text-white/65"
                   }`}
                 >
-                  {plan.monthly === 0 ? "forever" : "/month"}
+                  {plan.monthly === 0 ? "FCFA, pour toujours" : "FCFA / mois"}
                 </span>
               </p>
 
@@ -164,7 +108,7 @@ export function PricingPlans() {
                 }`}
               >
                 {annual && plan.monthly > 0
-                  ? `Billed €${plan.annualMonthly * 12} a year`
+                  ? `Soit ${formatFcfa(plan.annual)} FCFA payés pour un an`
                   : ""}
               </p>
 
@@ -194,7 +138,7 @@ export function PricingPlans() {
               </ul>
 
               <Link
-                href={plan.href}
+                href={hrefFor(plan, annual)}
                 className={`mt-9 inline-flex h-12 items-center justify-center rounded-xl text-[13px] font-bold uppercase tracking-[0.12em] transition-opacity hover:opacity-90 ${
                   plan.featured
                     ? "bg-white text-night"

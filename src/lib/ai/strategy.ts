@@ -5,6 +5,7 @@ import {
   ART_DIRECTIONS,
   inferPersonality,
   selectArtDirection,
+  SECTOR_LABELS,
   type ArtDirection,
   type Personality,
 } from "./art-direction";
@@ -60,9 +61,10 @@ You return JSON only — no prose, no code fences.
 Rules:
 - Detect the sector precisely. Use one of: fintech, finance, tech, health, food, luxury, beauty, education, legal, realestate, eco, agro, sport, creative, industry, hospitality. If none fit, return the closest.
 - seedColor is the single hue the brand should own, as #RRGGBB. Choose meaning over convention — avoid the sector cliché unless the brief explicitly asks for it.
-- Colour names must be evocative and concrete ("Kiln Orange", "Slate Fog"), never "Primary Blue".
+- Colour names must be evocative and concrete ("Orange Four", "Brume d'Ardoise"), never "Primary Blue".
 - The tagline must be a line the brand could actually print.
-- toneDo and toneDont must be rules a writer can follow, not adjectives.`;
+- toneDo and toneDont must be rules a writer can follow, not adjectives.
+- Write every human-readable value (rationale, colour names, personality, toneDo, toneDont, tagline, positioning) in French, the language of the product's users. Keep the sector slug in English.`;
 
 function buildPrompt(brief: BrandBrief, direction: ArtDirection): string {
   return `Define the strategy for this brand.
@@ -120,21 +122,21 @@ function buildTypography(
       size: Math.round(bodySize * Math.pow(scale, 4)),
       lineHeight: 1.05,
       tracking: direction.type.tracking,
-      usage: "Hero statements, campaign headlines, the logotype lockup.",
+      usage: "Grandes accroches, titres de campagne, logotype.",
     },
     {
       role: "heading",
       size: Math.round(bodySize * Math.pow(scale, 2)),
       lineHeight: 1.2,
       tracking: direction.type.tracking * 0.6,
-      usage: "Section titles and card headings across web and print.",
+      usage: "Titres de section et de cartes, sur le web et en impression.",
     },
     {
       role: "body",
       size: bodySize,
       lineHeight: 1.6,
       tracking: 0,
-      usage: "Running copy, product descriptions, long-form documents.",
+      usage: "Texte courant, descriptions de produits, documents longs.",
     },
     {
       role: "data",
@@ -142,7 +144,7 @@ function buildTypography(
       lineHeight: 1.45,
       tracking: 0.01,
       usage:
-        "Prices, tables, specs, codes — anything that must align in columns.",
+        "Prix, tableaux, fiches techniques, codes : tout ce qui doit s’aligner en colonnes.",
     },
   ];
 
@@ -272,7 +274,7 @@ function derivedRationale(
   direction: ArtDirection,
   sector: string,
 ): string {
-  return `${brief.name} operates in ${sector}. The system follows the ${direction.name} direction: ${direction.description} Colour is built on ${direction.color.harmony} harmony with ${direction.color.neutrals} neutrals, so the palette holds together across print and screen.`;
+  return `${brief.name} évolue dans le secteur ${SECTOR_LABELS[sector] ?? sector}. Le système suit la direction ${direction.name} : ${direction.description} Les couleurs reposent sur une harmonie ${HARMONY_LABELS[direction.color.harmony] ?? direction.color.harmony}, pour une palette qui tient aussi bien à l’écran qu’à l’impression.`;
 }
 
 function derivedVoice(brief: BrandBrief, direction: ArtDirection) {
@@ -287,27 +289,33 @@ function derivedVoice(brief: BrandBrief, direction: ArtDirection) {
 
   return {
     personality:
-      traits.length >= 3 ? traits : [...traits, "considered", "direct"].slice(0, 4),
+      traits.length >= 3 ? traits : [...traits, "réfléchie", "directe"].slice(0, 4),
     toneDo: [
-      "Lead with the outcome, then the detail.",
+      "Commencer par le résultat, puis donner le détail.",
       loud
-        ? "Use short, declarative sentences. One idea per line."
-        : "Let the sentence breathe; explain before you conclude.",
+        ? "Des phrases courtes et affirmatives. Une idée par ligne."
+        : "Laisser respirer la phrase ; expliquer avant de conclure.",
       premium
-        ? "Name the material, the process, or the maker."
-        : "Use concrete nouns — name the thing, not the category.",
+        ? "Nommer la matière, le savoir-faire ou l’artisan."
+        : "Des mots concrets : nommer la chose, pas la catégorie.",
     ],
     toneDont: [
-      "No superlatives that cannot be measured.",
-      "No industry jargon in customer-facing copy.",
+      "Pas de superlatifs impossibles à prouver.",
+      "Pas de jargon du métier dans les textes destinés aux clients.",
       premium
-        ? "Never mention price before value."
-        : "Never open with the company's own name.",
+        ? "Ne jamais parler du prix avant la valeur."
+        : "Ne jamais commencer par le nom de l’entreprise.",
     ],
-    tagline: `${brief.name} — ${brief.keywords.split(/[,.]/)[0]?.trim() || "made deliberately"}.`,
-    positioning: `For ${brief.audience || "people who care about the details"}, ${brief.name} is the ${brief.industry} that ${brief.keywords.split(/[,.]/)[0]?.trim() || "does it properly"}.`,
+    tagline: `${brief.name} — ${brief.keywords.split(/[,.]/)[0]?.trim() || "fait avec soin"}.`,
+    positioning: `Pour ${brief.audience || "celles et ceux qui tiennent aux détails"}, ${brief.name} est l’entreprise de ${brief.industry ? brief.industry.charAt(0).toLowerCase() + brief.industry.slice(1) : "son secteur"} qui mise sur : ${brief.keywords.split(/[,.]/)[0]?.trim() || "le travail bien fait"}.`,
   };
 }
+
+/** Libellés français des secteurs et des harmonies, pour les textes dérivés. */
+const HARMONY_LABELS: Record<string, string> = {
+  monochrome: "monochrome", analogous: "analogue", complementary: "complémentaire",
+  "split-complementary": "complémentaire divisée", triadic: "triadique",
+};
 
 /** Kept for callers that only need the derived system. */
 export function fallbackStrategy(

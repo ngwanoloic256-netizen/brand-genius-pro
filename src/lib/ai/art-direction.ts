@@ -106,9 +106,9 @@ export interface ArtDirection {
 export const ART_DIRECTIONS: ArtDirection[] = [
   {
     id: "minimal-suisse",
-    name: "Swiss minimal",
+    name: "Minimal suisse",
     description:
-      "Strict left alignment, a visible grid, and one accent doing all the work. Reads as precise and unarguable.",
+      "Alignement strict à gauche, grille visible et une seule couleur d’accent. Précis et indiscutable.",
     radius: 0,
     stroke: 1,
     whitespaceRatio: 0.45,
@@ -128,12 +128,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "cool",
       darkSurface: false,
     },
-    shapes: "orthogonal, strict alignment, controlled asymmetry",
-    iconography: "1.5px line, flat terminals",
-    imagery: "documentary photography, desaturated",
-    texture: "none",
-    shadow: "none",
-    layoutSignature: "wide left margin, hairline rule, flag composition",
+    shapes: "orthogonales, alignement strict, asymétrie maîtrisée",
+    iconography: "trait de 1,5 px, extrémités droites",
+    imagery: "photo documentaire, désaturée",
+    texture: "aucune",
+    shadow: "aucune",
+    layoutSignature: "large marge gauche, filet fin, composition en drapeau",
     mockup: {
       lighting: "soft studio",
       background: "neutral",
@@ -151,9 +151,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "corporate-institutionnel",
-    name: "Institutional",
+    name: "Institutionnel",
     description:
-      "Solid bands, symmetry, and a serif that signals permanence. Built to be trusted rather than admired.",
+      "Bandeaux pleins, symétrie et une police à empattements qui évoque la durée. Fait pour inspirer confiance.",
     radius: 3,
     stroke: 1.5,
     whitespaceRatio: 0.32,
@@ -173,12 +173,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "cool",
       darkSurface: false,
     },
-    shapes: "rectangular with a small radius, centred masses",
-    iconography: "2px line, rounded terminals",
-    imagery: "people at work, natural light, honest framing",
-    texture: "none",
-    shadow: "soft, shallow",
-    layoutSignature: "full-bleed banner, symmetrical blocks",
+    shapes: "rectangles légèrement arrondis, masses centrées",
+    iconography: "trait de 2 px, extrémités arrondies",
+    imagery: "personnes au travail, lumière naturelle, cadrage sincère",
+    texture: "aucune",
+    shadow: "douce, légère",
+    layoutSignature: "bandeau pleine largeur, blocs symétriques",
     mockup: {
       lighting: "soft studio",
       background: "neutral",
@@ -196,9 +196,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "luxe-editorial",
-    name: "Editorial luxury",
+    name: "Luxe éditorial",
     description:
-      "Enormous margins, spaced capitals, and a high-contrast serif. Confidence expressed as restraint.",
+      "Grandes marges, capitales espacées et police à fort contraste. L’assurance par la retenue.",
     radius: 0,
     stroke: 1,
     whitespaceRatio: 0.55,
@@ -218,12 +218,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: false,
     },
-    shapes: "thin rules, generous voids, nothing decorative",
-    iconography: "1px line, elongated",
-    imagery: "chiaroscuro still life, few objects",
-    texture: "none",
-    shadow: "deep and soft",
-    layoutSignature: "huge margins, letter-spaced capitals, centred title",
+    shapes: "filets fins, grands vides, rien de décoratif",
+    iconography: "trait de 1 px, allongé",
+    imagery: "nature morte en clair-obscur, peu d’objets",
+    texture: "aucune",
+    shadow: "profonde et douce",
+    layoutSignature: "très grandes marges, capitales espacées, titre centré",
     mockup: {
       lighting: "chiaroscuro",
       background: "deep neutral",
@@ -241,9 +241,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "tech-futuriste",
-    name: "Technical",
+    name: "Technique",
     description:
-      "Dark surfaces, a mono voice for data, and one luminous accent. Reads as engineered rather than designed.",
+      "Fonds sombres, police à chasse fixe pour les données et un accent lumineux. Conçu comme un outil d’ingénieur.",
     radius: 6,
     stroke: 1.5,
     whitespaceRatio: 0.38,
@@ -263,12 +263,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "cool",
       darkSurface: true,
     },
-    shapes: "rounded rectangles, dot grid, precise angles",
-    iconography: "1.5px line, geometric construction",
-    imagery: "abstract renders, long exposure, screens",
-    texture: "fine dot grid",
-    shadow: "glow rather than drop shadow",
-    layoutSignature: "dark panel, monospaced labels, dense data blocks",
+    shapes: "rectangles arrondis, grille de points, angles précis",
+    iconography: "trait de 1,5 px, construction géométrique",
+    imagery: "rendus abstraits, pose longue, écrans",
+    texture: "fine grille de points",
+    shadow: "halo lumineux plutôt qu’ombre portée",
+    layoutSignature: "panneau sombre, libellés à chasse fixe, blocs de données denses",
     mockup: {
       lighting: "backlit",
       background: "dark",
@@ -288,7 +288,7 @@ export const ART_DIRECTIONS: ArtDirection[] = [
     id: "organique-artisanal",
     name: "Artisanal",
     description:
-      "Soft serifs, earth pigments, and visible material. Made by hand, and says so.",
+      "Empattements doux, pigments terreux et matière visible. Fait main, et fier de l’être.",
     radius: 18,
     stroke: 2,
     whitespaceRatio: 0.35,
@@ -308,12 +308,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: false,
     },
-    shapes: "free curves, hand-drawn strokes, stamps",
-    iconography: "2px line, irregular terminals",
-    imagery: "raw materials, hands at work, side light",
-    texture: "paper and kraft",
-    shadow: "natural, directional",
-    layoutSignature: "stamp badge, hand-set label, torn edge",
+    shapes: "courbes libres, traits dessinés à la main, tampons",
+    iconography: "trait de 2 px, extrémités irrégulières",
+    imagery: "matières brutes, mains au travail, lumière rasante",
+    texture: "papier et kraft",
+    shadow: "naturelle, directionnelle",
+    layoutSignature: "badge tampon, étiquette composée à la main, bord déchiré",
     mockup: {
       lighting: "natural side light",
       background: "material surface",
@@ -331,9 +331,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "pop-ludique",
-    name: "Playful pop",
+    name: "Pop ludique",
     description:
-      "Pill shapes, saturated triads, and type that shouts. Built to be noticed at a distance.",
+      "Formes arrondies, couleurs vives et typographie qui claque. Fait pour se voir de loin.",
     radius: 999,
     stroke: 3,
     whitespaceRatio: 0.25,
@@ -356,12 +356,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: false,
     },
-    shapes: "stacked blobs, rotations, large flat fills",
-    iconography: "3px line, rounded terminals, filled",
-    imagery: "bright product shots, hard shadows",
-    texture: "none",
-    shadow: "hard offset",
-    layoutSignature: "stacked colour blocks, rotated badge, oversized type",
+    shapes: "formes empilées, rotations, grands aplats",
+    iconography: "trait de 3 px, extrémités arrondies, formes pleines",
+    imagery: "photos produit lumineuses, ombres dures",
+    texture: "aucune",
+    shadow: "décalée et dure",
+    layoutSignature: "blocs de couleur empilés, badge incliné, texte géant",
     mockup: {
       lighting: "hard sunlit shadows",
       background: "primary colour",
@@ -379,9 +379,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "brutaliste",
-    name: "Brutalist",
+    name: "Brutaliste",
     description:
-      "Heavy borders, condensed type, and raw colour. Deliberately unpolished, and impossible to ignore.",
+      "Bordures épaisses, police condensée et couleurs brutes. Volontairement brut, impossible à ignorer.",
     radius: 0,
     stroke: 3,
     whitespaceRatio: 0.28,
@@ -401,12 +401,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "true",
       darkSurface: false,
     },
-    shapes: "hard rectangles, 3px borders, deliberate offsets",
-    iconography: "3px line, blunt terminals",
-    imagery: "high-contrast photocopy, grain",
-    texture: "visible grain",
-    shadow: "none",
-    layoutSignature: "thick frame, misaligned blocks, violent contrast",
+    shapes: "rectangles durs, bordures de 3 px, décalages volontaires",
+    iconography: "trait de 3 px, extrémités franches",
+    imagery: "photocopie très contrastée, grain",
+    texture: "grain visible",
+    shadow: "aucune",
+    layoutSignature: "cadre épais, blocs désalignés, contraste violent",
     mockup: {
       lighting: "hard sunlit shadows",
       background: "primary colour",
@@ -424,9 +424,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "retro-vintage",
-    name: "Retro",
+    name: "Rétro",
     description:
-      "Slab type, badges, and burnt-orange warmth. Borrowed credibility from a century of signwriting.",
+      "Police à empattements carrés, badges et chaleur orange brûlé. La crédibilité d’un siècle d’enseignes peintes.",
     radius: 4,
     stroke: 2.5,
     whitespaceRatio: 0.3,
@@ -446,12 +446,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: false,
     },
-    shapes: "arcs, banners, badges, concentric rules",
-    iconography: "2.5px line, filled shapes",
-    imagery: "warm film stock, faded highlights",
-    texture: "halftone",
-    shadow: "flat offset",
-    layoutSignature: "circular badge, ribbon banner, arched wordmark",
+    shapes: "arcs, banderoles, badges, filets concentriques",
+    iconography: "trait de 2,5 px, formes pleines",
+    imagery: "pellicule chaude, hautes lumières passées",
+    texture: "trame de demi-teinte",
+    shadow: "décalée et plate",
+    layoutSignature: "badge circulaire, banderole, nom en arc",
     mockup: {
       lighting: "natural side light",
       background: "material surface",
@@ -469,9 +469,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "eco-naturel",
-    name: "Natural",
+    name: "Naturel",
     description:
-      "Sage, clay, and cream under a humanist voice. Calm without being weightless.",
+      "Sauge, argile et crème avec une typographie humaniste. Calme sans être fade.",
     radius: 12,
     stroke: 1.5,
     whitespaceRatio: 0.42,
@@ -491,12 +491,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: false,
     },
-    shapes: "soft rounded rectangles, organic curves",
-    iconography: "1.5px line, rounded terminals",
-    imagery: "botanical, daylight, unstyled",
-    texture: "kraft paper",
-    shadow: "soft, natural",
-    layoutSignature: "generous leading, botanical rule, soft panel",
+    shapes: "rectangles doux et arrondis, courbes organiques",
+    iconography: "trait de 1,5 px, extrémités arrondies",
+    imagery: "végétal, lumière du jour, sans mise en scène",
+    texture: "papier kraft",
+    shadow: "douce, naturelle",
+    layoutSignature: "interligne généreux, filet végétal, panneau doux",
     mockup: {
       lighting: "natural side light",
       background: "material surface",
@@ -514,9 +514,9 @@ export const ART_DIRECTIONS: ArtDirection[] = [
   },
   {
     id: "premium-sombre",
-    name: "Dark premium",
+    name: "Premium sombre",
     description:
-      "Anthracite and brass, very shallow gradients, deep shadow. Expensive without saying the word.",
+      "Anthracite et laiton, dégradés légers, ombres profondes. Haut de gamme sans le dire.",
     radius: 6,
     stroke: 1,
     whitespaceRatio: 0.48,
@@ -536,12 +536,12 @@ export const ART_DIRECTIONS: ArtDirection[] = [
       neutrals: "warm",
       darkSurface: true,
     },
-    shapes: "restrained rounded rectangles, thin metallic rules",
-    iconography: "1px line, fine detail",
-    imagery: "low-key product photography, single light",
-    texture: "very subtle gradient",
-    shadow: "deep and diffuse",
-    layoutSignature: "dark field, thin rule, small caps label",
+    shapes: "rectangles sobrement arrondis, fins filets métalliques",
+    iconography: "trait de 1 px, détails fins",
+    imagery: "photo produit en clé basse, une seule source",
+    texture: "dégradé très subtil",
+    shadow: "profonde et diffuse",
+    layoutSignature: "fond sombre, filet fin, libellé en petites capitales",
     mockup: {
       lighting: "chiaroscuro",
       background: "dark",
@@ -676,7 +676,7 @@ export function selectArtDirection(input: SelectionInput): SelectionResult {
       return {
         direction: forced,
         seed: brandSeed(input.name, input.sector, forced.id),
-        rationale: `${forced.name} was chosen explicitly.`,
+        rationale: `${forced.name} a été choisie par vous.`,
         alternatives: ART_DIRECTIONS.filter((ad) => ad.id !== forced.id).slice(0, 3),
       };
     }
@@ -718,18 +718,27 @@ export function selectArtDirection(input: SelectionInput): SelectionResult {
   };
 }
 
+/** Libellés français des secteurs (« le secteur de la santé »). */
+export const SECTOR_LABELS: Record<string, string> = {
+  fintech: "de la fintech", finance: "de la finance", tech: "de la tech", health: "de la santé",
+  food: "de l’alimentation", luxury: "du luxe", beauty: "de la beauté", education: "de l’éducation",
+  legal: "du droit", realestate: "de l’immobilier", eco: "de l’écologie", agro: "de l’agroalimentaire",
+  sport: "du sport", creative: "de la création", industry: "de l’industrie", hospitality: "de l’hôtellerie",
+  default: "de son marché",
+};
+
 function buildRationale(
   direction: ArtDirection,
   input: SelectionInput,
   neutral: boolean,
 ): string {
   const sectorFit = direction.sectors.includes(input.sector)
-    ? `It is a natural fit for ${input.sector}`
-    : `It cuts against the default look of ${input.sector}`;
+    ? `Elle convient naturellement au secteur ${SECTOR_LABELS[input.sector] ?? input.sector}`
+    : `Elle prend le contre-pied du style habituel du secteur ${SECTOR_LABELS[input.sector] ?? input.sector}`;
 
   return neutral
-    ? `${sectorFit}, and the brief left personality open — so the system committed to one clear position rather than averaging to a safe middle. ${direction.description}`
-    : `${sectorFit}, and it matches the personality you set. ${direction.description}`;
+    ? `${sectorFit}, et le brief laissait la personnalité ouverte : le système a donc pris une position claire plutôt qu’un juste milieu sans saveur. ${direction.description}`
+    : `${sectorFit}, et elle correspond à la personnalité choisie. ${direction.description}`;
 }
 
 /** Reads personality out of free-text keywords when no sliders were set. */

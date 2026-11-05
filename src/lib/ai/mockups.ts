@@ -128,7 +128,7 @@ function studioFloor(ctx: SceneContext, w: number, h: number, tone = 0.9): strin
 
 const businessCards: SceneTemplate = {
   id: "business-card-pair",
-  title: "Business cards",
+  title: "Cartes de visite",
   category: "print",
   family: "flat-lay",
   width: 1200,
@@ -179,7 +179,7 @@ const businessCards: SceneTemplate = {
           weight: 400,
         }),
         `<rect x="218" y="618" width="60" height="3" rx="1.5" fill="${ctx.accent}"/>`,
-        text("hello@" + slug(ctx.brandName) + ".com", {
+        text("contact@" + slug(ctx.brandName) + ".com", {
           x: 218,
           y: 660,
           size: 14,
@@ -195,7 +195,7 @@ const businessCards: SceneTemplate = {
 
 const stationerySet: SceneTemplate = {
   id: "stationery-set",
-  title: "Letterhead & envelope",
+  title: "Papier à en-tête et enveloppe",
   category: "print",
   family: "flat-lay",
   width: 1000,
@@ -258,7 +258,7 @@ const stationerySet: SceneTemplate = {
 
 const cardStack: SceneTemplate = {
   id: "card-stack-edge",
-  title: "Card stack",
+  title: "Pile de cartes",
   category: "print",
   family: "flat-lay",
   width: 1100,
@@ -317,7 +317,7 @@ const cardStack: SceneTemplate = {
 
 const packagingBox: SceneTemplate = {
   id: "packaging-box",
-  title: "Product box",
+  title: "Boîte produit",
   category: "packaging",
   family: "product-closeup",
   width: 1000,
@@ -384,7 +384,7 @@ const packagingBox: SceneTemplate = {
 
 const pouchPack: SceneTemplate = {
   id: "stand-up-pouch",
-  title: "Stand-up pouch",
+  title: "Sachet doypack",
   category: "packaging",
   family: "product-closeup",
   width: 900,
@@ -444,7 +444,7 @@ const pouchPack: SceneTemplate = {
 
 const bottleLabel: SceneTemplate = {
   id: "bottle-label",
-  title: "Bottle label",
+  title: "Étiquette de bouteille",
   category: "packaging",
   family: "product-closeup",
   width: 850,
@@ -508,7 +508,7 @@ const bottleLabel: SceneTemplate = {
 
 const takeawayCup: SceneTemplate = {
   id: "takeaway-cup",
-  title: "Takeaway cup",
+  title: "Gobelet à emporter",
   category: "packaging",
   family: "product-closeup",
   width: 900,
@@ -562,7 +562,7 @@ const takeawayCup: SceneTemplate = {
 
 const phoneApp: SceneTemplate = {
   id: "phone-app",
-  title: "Mobile app",
+  title: "Application mobile",
   category: "digital",
   family: "digital-screen",
   width: 900,
@@ -604,7 +604,7 @@ const phoneApp: SceneTemplate = {
           weight: 400,
         }),
         `<rect x="276" y="330" width="150" height="42" rx="21" fill="${ctx.accent}"/>`,
-        text("Get started", {
+        text("Commencer", {
           x: 351,
           y: 357,
           size: 14,
@@ -641,7 +641,7 @@ const phoneApp: SceneTemplate = {
 
 const laptopSite: SceneTemplate = {
   id: "laptop-website",
-  title: "Website",
+  title: "Site web",
   category: "digital",
   family: "digital-screen",
   width: 1400,
@@ -703,7 +703,7 @@ const laptopSite: SceneTemplate = {
           anchor: "middle",
         }),
         `<rect x="618" y="400" width="164" height="48" rx="24" fill="${ctx.accent}"/>`,
-        text("Explore", {
+        text("Découvrir", {
           x: 700,
           y: 430,
           size: 16,
@@ -730,7 +730,7 @@ const laptopSite: SceneTemplate = {
 
 const socialGrid: SceneTemplate = {
   id: "social-grid",
-  title: "Social posts",
+  title: "Publications réseaux sociaux",
   category: "digital",
   family: "digital-screen",
   width: 1100,
@@ -840,7 +840,7 @@ const socialGrid: SceneTemplate = {
 
 const storefront: SceneTemplate = {
   id: "storefront",
-  title: "Storefront",
+  title: "Devanture",
   category: "environmental",
   family: "signage",
   width: 1400,
@@ -906,7 +906,7 @@ const storefront: SceneTemplate = {
 
 const wallSign: SceneTemplate = {
   id: "reception-wall",
-  title: "Reception wall",
+  title: "Mur d’accueil",
   category: "environmental",
   family: "signage",
   width: 1300,
@@ -962,7 +962,7 @@ const wallSign: SceneTemplate = {
 
 const billboard: SceneTemplate = {
   id: "billboard",
-  title: "Billboard",
+  title: "Panneau publicitaire",
   category: "environmental",
   family: "signage",
   width: 1400,
@@ -1099,7 +1099,7 @@ const toteBag: SceneTemplate = {
 
 const tshirt: SceneTemplate = {
   id: "tshirt",
-  title: "Team apparel",
+  title: "Tenues d’équipe",
   category: "apparel",
   family: "lifestyle",
   width: 1100,
@@ -1148,7 +1148,7 @@ const tshirt: SceneTemplate = {
 
 const deskScene: SceneTemplate = {
   id: "desk-scene",
-  title: "In context",
+  title: "En situation",
   category: "print",
   family: "lifestyle",
   width: 1300,
@@ -1422,11 +1422,11 @@ export const MOCKUP_CATEGORIES: MockupCategory[] = [
 ];
 
 export const CATEGORY_LABELS: Record<MockupCategory, string> = {
-  print: "Print",
-  digital: "Digital",
-  packaging: "Packaging",
-  environmental: "Environmental",
-  apparel: "Apparel",
+  print: "Impression",
+  digital: "Numérique",
+  packaging: "Emballage",
+  environmental: "Signalétique",
+  apparel: "Textile",
 };
 
 function slug(name: string): string {

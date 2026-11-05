@@ -38,12 +38,12 @@ export type PipelineStage =
   | "done";
 
 export const STAGE_LABELS: Record<PipelineStage, string> = {
-  analyzing: "Analysing the brand",
-  palette: "Building the colour palette",
-  typography: "Selecting typography",
-  logo: "Drawing the logo system",
-  mockups: "Generating mockups",
-  done: "Finishing up",
+  analyzing: "Analyse de la marque",
+  palette: "Création de la palette",
+  typography: "Choix des polices",
+  logo: "Dessin du logo",
+  mockups: "Création des mockups",
+  done: "Finalisation",
 };
 
 export interface GenerateOptions {
@@ -173,7 +173,7 @@ export function markFromImportedLogo(
   }
 
   return {
-    concept: "Imported logo, normalised to the brand's coordinate system.",
+    concept: "Logo importé, adapté au système de la marque.",
     markup,
     lockup: "horizontal",
   };

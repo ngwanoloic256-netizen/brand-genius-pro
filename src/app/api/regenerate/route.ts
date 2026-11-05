@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
   }
 
   const parsed = RegenerateSchema.safeParse(body);
@@ -46,13 +46,13 @@ export async function POST(request: Request) {
 
   const user = isSupabaseConfigured() ? await getUser() : null;
   if (isSupabaseConfigured() && !user) {
-    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+    return NextResponse.json({ error: "Connectez-vous pour continuer." }, { status: 401 });
   }
 
   // RLS scopes this read to the caller, so a project they cannot see is a 404.
   const project = await getProject(projectId);
   if (!project?.guide) {
-    return NextResponse.json({ error: "Project not found." }, { status: 404 });
+    return NextResponse.json({ error: "Projet introuvable." }, { status: 404 });
   }
 
   const identity = identityFrom(request, user?.id);
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     await recordGeneration(section, "succeeded", { projectId });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Regeneration failed.";
+    const message = err instanceof Error ? err.message : "La nouvelle création a échoué.";
     await recordGeneration(section, "failed", { projectId, error: message });
     console.error(`Regeneration of ${section} failed:`, err);
     return NextResponse.json({ error: message }, { status: 502 });

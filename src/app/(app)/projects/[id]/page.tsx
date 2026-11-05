@@ -13,15 +13,18 @@ import { MockupsSection } from "@/components/guide/MockupsSection";
 import { VoiceSection } from "@/components/guide/VoiceSection";
 import { ArtDirectionSection } from "@/components/guide/ArtDirectionSection";
 import { FlyerSection } from "@/components/guide/FlyerSection";
+import { SocialSection } from "@/components/guide/SocialSection";
+import { currentSubscription } from "@/lib/billing/subscription";
 import { ExportBar, RegenerateButton } from "@/components/guide/ExportBar";
 import { ButtonLink } from "@/components/ui/Button";
+import { SECTOR_NAME_FR } from "@/lib/labels-fr";
 
 export async function generateMetadata(
   props: PageProps<"/projects/[id]">,
 ): Promise<Metadata> {
   const { id } = await props.params;
   const project = await getProject(id);
-  return { title: project ? `${project.name} — Brand guide` : "Project" };
+  return { title: project ? `${project.name} — Charte graphique` : "Projet" };
 }
 
 export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
@@ -35,6 +38,7 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
   }
 
   const guide = project.guide;
+  const { plan } = await currentSubscription();
 
   // Load only the families this guide actually uses.
   const fontsHref = combinedFontsHref(guide.typography.map((t) => t.family));
@@ -47,7 +51,7 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
             <p className="text-eyebrow mb-2.5">
-              {guide.brief.industry} · {guide.strategy.sector}
+              {guide.brief.industry} · {SECTOR_NAME_FR[guide.strategy.sector] ?? guide.strategy.sector}
             </p>
             <h1 className="font-display text-[clamp(1.875rem,5vw,3rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
               {project.name}
@@ -63,9 +67,9 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
               size="sm"
               href={`/projects/${project.id}/settings`}
             >
-              <Settings2 size={15} /> Brand settings
+              <Settings2 size={15} /> Réglages de la marque
             </ButtonLink>
-            <ExportBar guide={guide} projectId={project.id} />
+            <ExportBar guide={guide} projectId={project.id} watermark={plan.watermark} />
           </div>
         </div>
       </header>
@@ -76,21 +80,21 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
         <div className="min-w-0 flex-1 space-y-14">
           <GuideSection
             id="direction"
-            title="Art direction"
-            description="The profile every other decision on this page was derived from."
+            title="Direction artistique"
+            description="Le profil dont découlent tous les autres choix de cette page."
           >
             <ArtDirectionSection guide={guide} />
           </GuideSection>
 
           <GuideSection
             id="logo"
-            title="Logo & variations"
+            title="Logo et versions"
             description={guide.mark.concept}
             action={
               <RegenerateButton
                 projectId={project.id}
                 section="logo"
-                label="Regenerate"
+                label="Refaire"
               />
             }
           >
@@ -99,13 +103,13 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
 
           <GuideSection
             id="palette"
-            title="Colour palette"
-            description="Click any swatch to copy its hex. RGB is for screen, CMYK for print."
+            title="Palette de couleurs"
+            description="Cliquez sur une couleur pour copier son code. RVB pour l’écran, CMJN pour l’impression."
             action={
               <RegenerateButton
                 projectId={project.id}
                 section="palette"
-                label="Regenerate"
+                label="Refaire"
               />
             }
           >
@@ -114,13 +118,13 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
 
           <GuideSection
             id="typography"
-            title="Typography"
-            description="Four roles, each with its own job. Every specimen is set in the brand's own words."
+            title="Typographie"
+            description="Quatre rôles, chacun sa fonction. Chaque exemple est écrit avec les mots de la marque."
             action={
               <RegenerateButton
                 projectId={project.id}
                 section="typography"
-                label="Regenerate"
+                label="Refaire"
               />
             }
           >
@@ -129,8 +133,8 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
 
           <GuideSection
             id="usage"
-            title="Logo usage"
-            description="Clear space, minimum sizes, and the rules that keep the mark legible everywhere."
+            title="Utilisation du logo"
+            description="Zone de protection, tailles minimales et règles pour un logo lisible partout."
           >
             <UsageSection guide={guide} />
           </GuideSection>
@@ -143,7 +147,7 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
               <RegenerateButton
                 projectId={project.id}
                 section="mockups"
-                label="Regenerate"
+                label="Refaire"
               />
             }
           >
@@ -151,17 +155,25 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
           </GuideSection>
 
           <GuideSection
+            id="social"
+            title="Kit réseaux sociaux"
+            description="Photo de profil, publications, story et statut WhatsApp, couvertures Facebook, LinkedIn et YouTube, aux bonnes dimensions et avec les zones de sécurité de chaque plateforme. Modifiez le texte, tous les visuels suivent."
+          >
+            <SocialSection guide={guide} watermark={plan.watermark} />
+          </GuideSection>
+
+          <GuideSection
             id="flyers"
             title="Flyers"
-            description="Print-ready at true size, with bleed and a safe zone. The layout comes from the set this art direction allows."
+            description="Prêts à imprimer en taille réelle, avec fond perdu et zone de sécurité. La mise en page suit la direction artistique."
           >
             <FlyerSection guide={guide} />
           </GuideSection>
 
           <GuideSection
             id="voice"
-            title="Tone & personality"
-            description="How the brand sounds when it writes."
+            title="Ton et personnalité"
+            description="La façon dont la marque s’exprime à l’écrit."
           >
             <VoiceSection strategy={guide.strategy} />
           </GuideSection>
@@ -179,22 +191,21 @@ function EmptyGuide({ name, id }: { name: string; id: string }) {
           <Sparkles size={22} />
         </span>
         <h1 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
-          {name} has no guide yet
+          {name} n’a pas encore de charte
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
-          This project was saved as a draft. Run the generator to produce the
-          logo system, palette, typography, and mockups.
+          Ce projet est un brouillon. Lancez la création pour obtenir le logo, la palette, les polices et les mockups.
         </p>
         <div className="mt-7 flex justify-center gap-3">
-          <ButtonLink href="/projects/new">Generate the guide</ButtonLink>
+          <ButtonLink href="/projects/new">Créer la charte</ButtonLink>
           <Link
             href="/dashboard"
             className="inline-flex items-center px-4 text-sm font-semibold text-ink-muted hover:text-ink"
           >
-            Back to projects
+            Retour aux projets
           </Link>
         </div>
-        <p className="sr-only">Project {id}</p>
+        <p className="sr-only">Projet {id}</p>
       </div>
     </div>
   );

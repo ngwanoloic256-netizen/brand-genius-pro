@@ -195,22 +195,22 @@ export function derivePalette(input: PaletteInput): PaletteResult {
   const names = input.names ?? {};
   const swatches: ColorSwatch[] = [
     swatch(
-      names.primary ?? "Primary",
+      names.primary ?? "Principale",
       primaryHex,
       "primary",
-      "Carries the brand. Roughly 60% of any coloured surface.",
+      "Porte la marque. Environ 60 % des surfaces colorées.",
     ),
     swatch(
-      names.secondary ?? "Secondary",
+      names.secondary ?? "Secondaire",
       oklchToHex(secondaryBase),
       "secondary",
-      "Supporting surfaces and section breaks — about 30%.",
+      "Surfaces d’appui et séparations de sections, environ 30 %.",
     ),
     swatch(
       names.accent ?? "Accent",
       oklchToHex(accentBase),
       "accent",
-      "Calls to action only. Never decorative, and never more than 10%.",
+      "Uniquement pour les appels à l’action. Jamais décorative, jamais plus de 10 %.",
     ),
     ...buildNeutrals(base, direction, names.neutral),
   ];
@@ -250,10 +250,10 @@ function buildNeutrals(
         : base.h;
 
   const steps: Array<[string, number, string]> = [
-    ["Paper", 0.985, "Page backgrounds and generous white space."],
-    ["Mist", 0.92, "Panels, dividers, and disabled states."],
-    ["Slate", 0.62, "Secondary text, captions, and icons."],
-    ["Graphite", 0.22, "Body copy and high-contrast surfaces."],
+    ["Papier", 0.985, "Fonds de page et grands espaces blancs."],
+    ["Brume", 0.92, "Panneaux, séparateurs et éléments désactivés."],
+    ["Ardoise", 0.62, "Textes secondaires, légendes et icônes."],
+    ["Graphite", 0.22, "Texte courant et surfaces à fort contraste."],
   ];
 
   return steps.map(([name, l, usage], i) =>

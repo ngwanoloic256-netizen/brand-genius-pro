@@ -8,7 +8,7 @@ export function VoiceSection({ strategy }: { strategy: BrandStrategy }) {
     <div className="space-y-4">
       <div className="rounded-xl border border-line bg-ink p-6 text-bone sm:p-8">
         <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent-soft">
-          Positioning
+          Positionnement
         </p>
         <p className="mt-3 font-display text-[clamp(1.25rem,3vw,1.75rem)] font-bold leading-[1.25] tracking-[-0.02em]">
           {voice.positioning}
@@ -21,7 +21,7 @@ export function VoiceSection({ strategy }: { strategy: BrandStrategy }) {
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="rounded-xl border border-line bg-white p-6">
           <h3 className="mb-4 text-[13px] font-bold uppercase tracking-[0.1em]">
-            Personality
+            Personnalité
           </h3>
           <ul className="flex flex-wrap gap-2">
             {voice.personality.map((trait) => (
@@ -35,7 +35,7 @@ export function VoiceSection({ strategy }: { strategy: BrandStrategy }) {
           </ul>
 
           <h3 className="mb-2 mt-7 text-[13px] font-bold uppercase tracking-[0.1em]">
-            Tagline
+            Slogan
           </h3>
           <p className="font-display text-lg font-bold leading-snug">
             {voice.tagline}
@@ -43,13 +43,13 @@ export function VoiceSection({ strategy }: { strategy: BrandStrategy }) {
         </div>
 
         <ToneList
-          title="Write like this"
+          title="Écrire comme ceci"
           items={voice.toneDo}
           tone="positive"
           icon={<Check size={13} strokeWidth={3} />}
         />
         <ToneList
-          title="Not like this"
+          title="Pas comme cela"
           items={voice.toneDont}
           tone="signal"
           icon={<X size={13} strokeWidth={3} />}
